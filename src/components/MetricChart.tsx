@@ -165,7 +165,6 @@ const MetricChart: React.FC<MetricChartProps> = ({
     <div>
       <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
       <div style={{ height: "300px" }}>
-        {/* FIX: The 'options' prop was being passed an undefined variable 'options' instead of 'chartOptions'. */}
         <Line
           options={chartOptions}
           data={chartData as unknown as ChartData<"line">}
