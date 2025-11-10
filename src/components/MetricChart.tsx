@@ -11,6 +11,7 @@ import {
   TimeScale,
   Filler,
   type ChartOptions,
+  type ChartData,
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import type { IntermediateData } from "../types";
@@ -82,7 +83,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
                 label += ": ";
               }
               if (context.parsed.y !== null) {
-                let value = context.parsed.y;
+                const value = context.parsed.y;
                 if (yAxisType === "bytes") label += formatBytes(value);
                 else if (yAxisType === "time")
                   label += `${value.toFixed(2)} ms`;
@@ -165,7 +166,10 @@ const MetricChart: React.FC<MetricChartProps> = ({
       <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
       <div style={{ height: "300px" }}>
         {/* FIX: The 'options' prop was being passed an undefined variable 'options' instead of 'chartOptions'. */}
-        <Line options={chartOptions} data={chartData} />
+        <Line
+          options={chartOptions}
+          data={chartData as unknown as ChartData<"line">}
+        />
       </div>
     </div>
   );
