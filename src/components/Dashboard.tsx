@@ -69,85 +69,79 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
 
         <Separator />
 
-        <TabsContent value="overview">
-          <div className="space-y-6 animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-              <StatCard
-                title="VUsers Criados"
-                value={vusersCreated.toLocaleString("pt-BR")}
-              />
-              <div className="bg-gray-800 p-4 rounded-lg shadow-lg col-span-1">
-                <h3 className="text-gray-400 text-sm font-semibold uppercase">
-                  Conclusão
-                </h3>
-                <p className="text-2xl text-green-400 font-bold">
-                  {vusersCompleted.toLocaleString("pt-BR")}
-                </p>
-                <p className="text-sm text-green-400">
-                  {completionRate.toFixed(2)}%
-                </p>
-                <p className="text-2xl text-red-400 font-bold mt-2">
-                  {vusersFailed.toLocaleString("pt-BR")}
-                </p>
-                <p className="text-sm text-red-400">
-                  {failureRate.toFixed(2)}%
-                </p>
-              </div>
-              <StatCard title="Média de Req/s" value={avgReqs.toFixed(1)} />
-              <StatCard title="Pico de Req/s" value={peakReqs.toFixed(1)} />
-              <StatCard
-                title="Total Requisições"
-                value={(
-                  aggregate.counters["http.requests"] || 0
-                ).toLocaleString("pt-BR")}
-              />
+        <TabsContent value="overview" className="space-y-6 animate-fadeIn">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            <StatCard
+              title="VUsers Criados"
+              value={vusersCreated.toLocaleString("pt-BR")}
+            />
+            <div className="bg-gray-800 p-4 rounded-lg shadow-lg col-span-1">
+              <h3 className="text-gray-400 text-sm font-semibold uppercase">
+                Conclusão
+              </h3>
+              <p className="text-2xl text-green-400 font-bold">
+                {vusersCompleted.toLocaleString("pt-BR")}
+              </p>
+              <p className="text-sm text-green-400">
+                {completionRate.toFixed(2)}%
+              </p>
+              <p className="text-2xl text-red-400 font-bold mt-2">
+                {vusersFailed.toLocaleString("pt-BR")}
+              </p>
+              <p className="text-sm text-red-400">{failureRate.toFixed(2)}%</p>
             </div>
+            <StatCard title="Média de Req/s" value={avgReqs.toFixed(1)} />
+            <StatCard title="Pico de Req/s" value={peakReqs.toFixed(1)} />
+            <StatCard
+              title="Total Requisições"
+              value={(aggregate.counters["http.requests"] || 0).toLocaleString(
+                "pt-BR"
+              )}
+            />
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2">
-                <ErrorsCard counters={aggregate.counters} />
-              </div>
-              <div>
-                <MetadataCard intermediate={intermediate} fileName={fileName} />
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <ErrorsCard counters={aggregate.counters} />
             </div>
+            <div>
+              <MetadataCard intermediate={intermediate} fileName={fileName} />
+            </div>
+          </div>
 
-            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl font-bold text-white mb-4">
+              Métricas ao Longo do Tempo
+            </h2>
+            <TimeSeriesChart intermediateData={intermediate} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
               <h2 className="text-xl font-bold text-white mb-4">
-                Métricas ao Longo do Tempo
+                Performance HTTP
               </h2>
-              <TimeSeriesChart intermediateData={intermediate} />
+              <ResponseTimeChart
+                summary={aggregate.summaries["http.response_time"]}
+              />
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                <h2 className="text-xl font-bold text-white mb-4">
-                  Performance HTTP
-                </h2>
-                <ResponseTimeChart
-                  summary={aggregate.summaries["http.response_time"]}
-                />
-              </div>
-              <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg flex flex-col items-center justify-center">
-                <h2 className="text-xl font-bold text-white mb-4">
-                  Distribuição de Respostas
-                </h2>
-                <HttpCodesChart counters={aggregate.counters} />
-              </div>
+            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg flex flex-col items-center justify-center">
+              <h2 className="text-xl font-bold text-white mb-4">
+                Distribuição de Respostas
+              </h2>
+              <HttpCodesChart counters={aggregate.counters} />
             </div>
+          </div>
 
-            <EndpointBreakdown data={data} />
+          <EndpointBreakdown data={data} />
 
-            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-              <ChartBuilder data={data} />
-            </div>
+          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+            <ChartBuilder data={data} />
           </div>
         </TabsContent>
 
-        <TabsContent value="metrics">
-          <div className="animate-fadeIn">
-            <MetricsView data={data} />
-          </div>
+        <TabsContent value="metrics" className="animate-fadeIn">
+          <MetricsView data={data} />
         </TabsContent>
       </Tabs>
     </div>
