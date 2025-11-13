@@ -13,6 +13,7 @@ import {
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import type { ArtilleryData, Summary } from "../types";
+import { CardTitle } from "./ui/card";
 
 ChartJS.register(
   LinearScale,
@@ -241,9 +242,9 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-white mb-4">
+      <CardTitle className="mb-4">
         Construtor de Gráficos
-      </h2>
+      </CardTitle>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
           {selectedMetrics.length > 0 ? (

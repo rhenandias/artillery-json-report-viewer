@@ -3,6 +3,7 @@ import { Line } from "react-chartjs-2";
 import type { ArtilleryData } from "../types";
 import EndpointDetailChart from "./EndpointDetailChart";
 import type { ChartOptions } from "chart.js";
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 
 interface EndpointMetric {
   codes: { [code: string]: number };
@@ -109,11 +110,12 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg shadow-lg">
-      <h2 className="text-xl font-bold text-white p-4 sm:p-6 border-b border-gray-700">
-        Detalhamento por URL
-      </h2>
-      <div className="divide-y divide-gray-700">
+    <Card className="p-0">
+      <CardHeader className="p-4 sm:p-6 border-b border-gray-700">
+        <CardTitle>Detalhamento por URL</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="divide-y divide-gray-700">
         {/* FIX: Explicitly type the arguments of the map callback to resolve the 'unknown' type for metrics. */}
         {Object.entries(endpointData).map(
           ([name, metrics]: [string, EndpointMetric]) => (
@@ -211,8 +213,9 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
             </div>
           )
         )}
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

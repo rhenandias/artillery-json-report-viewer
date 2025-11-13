@@ -3,6 +3,7 @@ import React from 'react';
 import type { ArtilleryData } from '../types';
 import MetricChart from './MetricChart';
 import MetricsSidebar from './MetricsSidebar';
+import { Card, CardContent } from './ui/card';
 
 const chartConfigs = [
   {
@@ -117,15 +118,17 @@ const MetricsView: React.FC<{ data: ArtilleryData }> = ({ data }) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-[2fr_1fr] gap-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {chartConfigs.map(config => (
-                    <div key={config.title} id={`chart-${sanitizedTitle(config.title)}`} className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-                        <MetricChart
-                            title={config.title}
-                            metrics={config.metrics}
-                            yAxisLabel={config.yAxisLabel}
-                            yAxisType={config.yAxisType as any}
-                            intermediateData={data.intermediate}
-                        />
-                    </div>
+                    <Card key={config.title} id={`chart-${sanitizedTitle(config.title)}`}>
+                        <CardContent>
+                            <MetricChart
+                                title={config.title}
+                                metrics={config.metrics}
+                                yAxisLabel={config.yAxisLabel}
+                                yAxisType={config.yAxisType as any}
+                                intermediateData={data.intermediate}
+                            />
+                        </CardContent>
+                    </Card>
                 ))}
             </div>
             <div className="space-y-6">

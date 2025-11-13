@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import type { IntermediateData } from "../types";
+import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 
 interface MetadataCardProps {
   intermediate: IntermediateData[];
@@ -53,9 +54,12 @@ const MetadataCard: React.FC<MetadataCardProps> = ({
   }, [intermediate, fileName]);
 
   return (
-    <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg h-full">
-      <h2 className="text-xl font-bold text-white mb-4">Metadados</h2>
-      <div className="space-y-3">
+    <Card className="h-full">
+      <CardHeader>
+        <CardTitle>Metadados</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-3">
         <MetadataItem
           icon={
             <svg
@@ -110,8 +114,9 @@ const MetadataCard: React.FC<MetadataCardProps> = ({
           }
           label={metadata.duration}
         />
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

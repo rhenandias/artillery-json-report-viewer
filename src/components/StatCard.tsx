@@ -1,18 +1,19 @@
-
-import React from 'react';
+import { Card, CardDescription, CardContent } from "./ui/card";
 
 interface StatCardProps {
   title: string;
   value: string | number;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value }) => {
+function StatCard({ title, value }: StatCardProps) {
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg text-center sm:text-left">
-      <h3 className="text-gray-400 text-sm font-semibold uppercase">{title}</h3>
-      <p className="text-3xl text-white font-bold">{value}</p>
-    </div>
+    <Card className="text-center sm:text-left">
+      <CardDescription>{title}</CardDescription>
+      <CardContent>
+        <p className="text-3xl text-white font-bold">{value}</p>
+      </CardContent>
+    </Card>
   );
-};
+}
 
 export default StatCard;

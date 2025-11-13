@@ -12,6 +12,7 @@ import { ChartPie, Eye, File, RefreshCcw } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Button } from "./ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
 
 interface DashboardProps {
   data: ArtilleryData;
@@ -75,21 +76,23 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
               title="VUsers Criados"
               value={vusersCreated.toLocaleString("pt-BR")}
             />
-            <div className="bg-gray-800 p-4 rounded-lg shadow-lg col-span-1">
-              <h3 className="text-gray-400 text-sm font-semibold uppercase">
+            <Card className="col-span-1">
+              <CardDescription>
                 Conclusão
-              </h3>
-              <p className="text-2xl text-green-400 font-bold">
-                {vusersCompleted.toLocaleString("pt-BR")}
-              </p>
-              <p className="text-sm text-green-400">
-                {completionRate.toFixed(2)}%
-              </p>
-              <p className="text-2xl text-red-400 font-bold mt-2">
-                {vusersFailed.toLocaleString("pt-BR")}
-              </p>
-              <p className="text-sm text-red-400">{failureRate.toFixed(2)}%</p>
-            </div>
+              </CardDescription>
+              <CardContent>
+                <p className="text-2xl text-green-400 font-bold">
+                  {vusersCompleted.toLocaleString("pt-BR")}
+                </p>
+                <p className="text-sm text-green-400">
+                  {completionRate.toFixed(2)}%
+                </p>
+                <p className="text-2xl text-red-400 font-bold mt-2">
+                  {vusersFailed.toLocaleString("pt-BR")}
+                </p>
+                <p className="text-sm text-red-400">{failureRate.toFixed(2)}%</p>
+              </CardContent>
+            </Card>
             <StatCard title="Média de Req/s" value={avgReqs.toFixed(1)} />
             <StatCard title="Pico de Req/s" value={peakReqs.toFixed(1)} />
             <StatCard
@@ -109,35 +112,43 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-bold text-white mb-4">
-              Métricas ao Longo do Tempo
-            </h2>
-            <TimeSeriesChart intermediateData={intermediate} />
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Métricas ao Longo do Tempo</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TimeSeriesChart intermediateData={intermediate} />
+            </CardContent>
+          </Card>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-bold text-white mb-4">
-                Performance HTTP
-              </h2>
-              <ResponseTimeChart
-                summary={aggregate.summaries["http.response_time"]}
-              />
-            </div>
-            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg flex flex-col items-center justify-center">
-              <h2 className="text-xl font-bold text-white mb-4">
-                Distribuição de Respostas
-              </h2>
-              <HttpCodesChart counters={aggregate.counters} />
-            </div>
+            <Card className="lg:col-span-2">
+              <CardHeader>
+                <CardTitle>Performance HTTP</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponseTimeChart
+                  summary={aggregate.summaries["http.response_time"]}
+                />
+              </CardContent>
+            </Card>
+            <Card className="flex flex-col items-center justify-center">
+              <CardHeader>
+                <CardTitle>Distribuição de Respostas</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <HttpCodesChart counters={aggregate.counters} />
+              </CardContent>
+            </Card>
           </div>
 
           <EndpointBreakdown data={data} />
 
-          <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
-            <ChartBuilder data={data} />
-          </div>
+          <Card>
+            <CardContent>
+              <ChartBuilder data={data} />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="metrics" className="animate-fadeIn">
