@@ -1,4 +1,3 @@
-
 import type { ArtilleryData } from "../types";
 import StatCard from "./StatCard";
 import TimeSeriesChart from "./TimeSeriesChart";
@@ -9,27 +8,16 @@ import EndpointBreakdown from "./EndpointBreakdown";
 import ErrorsCard from "./ErrorsCard";
 import MetadataCard from "./MetadataCard";
 import MetricsView from "./MetricsView";
-import { ChartPie, Eye, File } from "lucide-react";
+import { ChartPie, Eye, File, RefreshCcw } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import { Button } from "./ui/button";
 
 interface DashboardProps {
   data: ArtilleryData;
   fileName: string;
   onReset: () => void;
 }
-
-const ActionButton: React.FC<{
-  children: React.ReactNode;
-  onClick?: () => void;
-}> = ({ children, onClick }) => (
-  <button
-    onClick={onClick}
-    className="bg-gray-700 hover:bg-gray-600 text-gray-300 font-semibold py-2 px-3 rounded-lg transition duration-300 ease-in-out text-sm flex items-center gap-2"
-  >
-    {children}
-  </button>
-);
 
 function Dashboard({ data, fileName, onReset }: DashboardProps) {
   const { aggregate, intermediate } = data;
@@ -51,7 +39,7 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
 
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs defaultValue="overview" className="w-full space-y-3">
         <div className="flex flex-wrap justify-between items-center gap-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-white font-semibold bg-gray-800 px-3 py-2 rounded-lg">
@@ -62,34 +50,21 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
             <Separator orientation="vertical" />
 
             <TabsList>
-              <TabsTrigger value="overview" className="flex items-center gap-2">
+              <TabsTrigger value="overview">
                 <Eye size={20} />
                 Overview
               </TabsTrigger>
-              <TabsTrigger value="metrics" className="flex items-center gap-2">
+              <TabsTrigger value="metrics">
                 <ChartPie size={20} />
                 Metrics
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <div className="flex items-center gap-2">
-            <ActionButton onClick={onReset}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Novo Relatório
-            </ActionButton>
-          </div>
+          <Button variant="action" onClick={onReset}>
+            <RefreshCcw />
+            Novo Relatório
+          </Button>
         </div>
 
         <Separator />

@@ -42,7 +42,7 @@ function TabsTrigger({
       className={cn(
         "flex items-center gap-2 px-4 py-3 text-sm font-semibold transition-colors duration-200 border-b-2 border-transparent",
         "data-[state=active]:text-white data-[state=active]:border-blue-500",
-        "data-[state=inactive]:text-gray-400 hover:text-white",
+        "data-[state=inactive]:text-gray-400 hover:text-white hover:cursor-pointer",
         "disabled:opacity-50 disabled:cursor-not-allowed",
         className
       )}
