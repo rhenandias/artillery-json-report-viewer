@@ -29,7 +29,7 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
   if (!summary) {
     return (
       <p className="text-center text-gray-400">
-        Dados de tempo de resposta não disponíveis.
+        Response time data not available.
       </p>
     );
   }
@@ -59,7 +59,7 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
         },
         title: {
           display: true,
-          text: "Tempo de Resposta",
+          text: "Response Time",
           color: "#A0AEC0",
         },
       },
@@ -77,7 +77,7 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
     },
   };
 
-  const labels = ["min", "médio", "p50", "p75", "p90", "p95", "p99", "max"];
+  const labels = ["min", "mean", "p50", "p75", "p90", "p95", "p99", "max"];
   const dataValues = [
     summary.min,
     summary.mean,
@@ -93,7 +93,7 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
     labels,
     datasets: [
       {
-        label: "Tempo de Resposta (ms)",
+        label: "Response Time (ms)",
         data: dataValues,
         backgroundColor: [
           "#0284C7",

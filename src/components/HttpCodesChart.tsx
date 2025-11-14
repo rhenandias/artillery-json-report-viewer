@@ -25,16 +25,16 @@ const HttpCodesChart: React.FC<HttpCodesChartProps> = ({ counters }) => {
   const allEntries = [...codeEntries, ...errorEntries];
 
   if (allEntries.length === 0) {
-    return <p className="text-gray-400">Sem dados de resposta.</p>;
+    return <p className="text-gray-400">No response data.</p>;
   }
 
   const data = {
     labels: allEntries.map(([key]) =>
-      key.replace("http.codes.", "HTTP ").replace("errors.", "Erro: ")
+      key.replace("http.codes.", "HTTP ").replace("errors.", "Error: ")
     ),
     datasets: [
       {
-        label: "Contagem",
+        label: "Count",
         data: allEntries.map(([, value]) => value),
         backgroundColor: [
           "#22C55E", // Green for success

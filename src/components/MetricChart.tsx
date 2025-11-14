@@ -87,7 +87,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
                 if (yAxisType === "bytes") label += formatBytes(value);
                 else if (yAxisType === "time")
                   label += `${value.toFixed(2)} ms`;
-                else label += value.toLocaleString("pt-BR");
+                else label += value.toLocaleString("en-US");
               }
               return label;
             },
@@ -155,7 +155,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
       <div>
         <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
         <div className="flex items-center justify-center h-[300px] border border-dashed border-gray-700 rounded-md">
-          <p className="text-gray-500">Métrica não encontrada no relatório.</p>
+          <p className="text-gray-500">Metric not found in the report.</p>
         </div>
       </div>
     );

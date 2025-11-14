@@ -79,7 +79,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         position: "left",
         title: {
           display: true,
-          text: "VUsers / Requisições por Segundo",
+          text: "VUsers / Requests per Second",
           color: "#A0AEC0",
         },
         grid: {
@@ -95,7 +95,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         position: "right",
         title: {
           display: true,
-          text: "Tempo de Resposta (ms)",
+          text: "Response Time (ms)",
           color: "#A0AEC0",
         },
         grid: {
@@ -111,7 +111,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   const data = {
     datasets: [
       {
-        label: "Taxa de Requisições (http.request_rate)",
+        label: "Request Rate (http.request_rate)",
         data: intermediateData.map((item) => ({
           x: parseInt(item.period),
           y: item.rates["http.request_rate"] || 0,
@@ -123,7 +123,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         fill: true,
       },
       {
-        label: "Tempo de Resposta p95 (ms)",
+        label: "Response Time p95 (ms)",
         data: intermediateData.map((item) => ({
           x: parseInt(item.period),
           y: item.summaries["http.response_time"]?.p95 || null,
@@ -135,7 +135,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         fill: true,
       },
       {
-        label: "VUsers Criados",
+        label: "VUsers Created",
         data: intermediateData.map((item) => ({
           x: parseInt(item.period),
           y: item.counters["vusers.created"] || 0,
@@ -148,7 +148,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         pointRadius: 2,
       },
       {
-        label: "VUsers Falhados",
+        label: "VUsers Failed",
         data: intermediateData.map((item) => ({
           x: parseInt(item.period),
           y: item.counters["vusers.failed"] || 0,
@@ -161,7 +161,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         pointRadius: 2,
       },
       {
-        label: "VUsers Completos",
+        label: "VUsers Completed",
         data: intermediateData.map((item) => ({
           x: parseInt(item.period),
           y: item.counters["vusers.completed"] || 0,
