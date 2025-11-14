@@ -103,7 +103,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
           </CardHeader>
           <CardContent>
             <ResponseTimeChart
-              summary={aggregate.summaries['http.response_time']}
+              summary={aggregate.summaries?.['http.response_time']}
             />
           </CardContent>
         </Card>

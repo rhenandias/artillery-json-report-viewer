@@ -23,10 +23,10 @@ function SummaryView({ data }: SummaryViewProps) {
       count: value,
     }));
 
-  const responseTime = aggregate.summaries['http.response_time'];
-  const responseTime2xx = aggregate.summaries['http.response_time.2xx'];
-  const responseTime4xx = aggregate.summaries['http.response_time.4xx'];
-  const sessionLength = aggregate.summaries['vusers.session_length'];
+  const responseTime = aggregate.summaries?.['http.response_time'];
+  const responseTime2xx = aggregate.summaries?.['http.response_time.2xx'];
+  const responseTime4xx = aggregate.summaries?.['http.response_time.4xx'];
+  const sessionLength = aggregate.summaries?.['vusers.session_length'];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
