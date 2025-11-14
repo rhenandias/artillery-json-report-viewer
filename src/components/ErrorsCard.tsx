@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 
 interface ErrorsCardProps {
   counters: { [key: string]: number };
@@ -21,7 +21,7 @@ const ErrorsCard: React.FC<ErrorsCardProps> = ({ counters }) => {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Erros</CardTitle>
+        <CardTitle>Errors</CardTitle>
       </CardHeader>
       <CardContent>
         {errorEntries.length > 0 ? (
@@ -40,7 +40,7 @@ const ErrorsCard: React.FC<ErrorsCardProps> = ({ counters }) => {
           </div>
         ) : (
           <div className="flex items-center justify-center h-24">
-            <p className="text-gray-500">Nenhum erro reportado.</p>
+            <p className="text-gray-500">No errors reported.</p>
           </div>
         )}
       </CardContent>

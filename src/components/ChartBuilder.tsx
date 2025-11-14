@@ -14,6 +14,7 @@ import {
 import "chartjs-adapter-date-fns";
 import type { ArtilleryData, Summary } from "../types";
 import { CardTitle } from "./ui/card";
+import Sparkline from "./Sparkline";
 
 ChartJS.register(
   LinearScale,
@@ -74,10 +75,10 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           discoveredMetrics.set(key, {
             key,
             label: key
-              .replace("errors.", "Erro: ")
+              .replace("errors.", "Error: ")
               .replace("http.codes.", "HTTP "),
             category: key.startsWith("errors.")
-              ? "Erros"
+              ? "Errors"
               : key.startsWith("http.")
               ? "HTTP"
               : "VUsers",
@@ -95,7 +96,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           discoveredMetrics.set(key, {
             key,
             label: key,
-            category: "Taxas",
+            category: "Rates",
             type: "count",
           });
         }
@@ -106,16 +107,19 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         const summary = point.summaries[summaryKey];
         if (summary && !excludedPatterns.some((p) => p.test(summaryKey))) {
           for (const subKey in summary) {
-            if (typeof (summary as any)[subKey] === "number") {
+            if (
+              typeof (summary as unknown as Record<string, unknown>)[subKey] ===
+              "number"
+            ) {
               const fullKey = `${summaryKey}.${subKey}`;
               if (!discoveredMetrics.has(fullKey)) {
                 discoveredMetrics.set(fullKey, {
                   key: fullKey,
                   label: `${summaryKey.replace(
                     "http.response_time",
-                    "Tempo de Resposta"
+                    "Response Time"
                   )} (${subKey})`,
-                  category: "Tempo de Resposta",
+                  category: "Response Time",
                   type: "time",
                 });
               }
@@ -170,7 +174,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           type: "linear",
           display: true,
           position: "left",
-          title: { display: true, text: "Contagem / Taxa", color: "#A0AEC0" },
+          title: { display: true, text: "Count / Rate", color: "#A0AEC0" },
           grid: { color: "rgba(255, 255, 255, 0.1)" },
           ticks: { color: "#A0AEC0" },
         },
@@ -178,7 +182,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           type: "linear",
           display: true,
           position: "right",
-          title: { display: true, text: "Tempo (ms)", color: "#A0AEC0" },
+          title: { display: true, text: "Time (ms)", color: "#A0AEC0" },
           grid: { drawOnChartArea: false },
           ticks: { color: "#A0AEC0" },
         },
@@ -194,14 +198,14 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         let value: number | null = null;
 
         if (metricInfo) {
-          if (metricInfo.category === "Tempo de Resposta") {
+          if (metricInfo.category === "Response Time") {
             const parts = metricKey.split(".");
             const subKey = parts.pop() as keyof Summary;
             const summaryKey = parts.join(".");
             if (summaryKey && subKey && item.summaries[summaryKey]) {
               value = item.summaries[summaryKey]?.[subKey] ?? null;
             }
-          } else if (metricInfo.category === "Taxas") {
+          } else if (metricInfo.category === "Rates") {
             value = item.rates[metricKey] ?? null;
           } else {
             // Counters (VUsers, HTTP, Erros)
@@ -242,9 +246,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
 
   return (
     <div>
-      <CardTitle className="mb-4">
-        Construtor de Gráficos
-      </CardTitle>
+      <CardTitle className="mb-4">Chart Builder</CardTitle>
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
           {selectedMetrics.length > 0 ? (
@@ -254,8 +256,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           ) : (
             <div className="flex items-center justify-center h-[450px] border-2 border-dashed border-gray-700 rounded-lg bg-gray-900/50">
               <p className="text-gray-500 text-center">
-                Selecione uma métrica na lista para começar a construir seu
-                gráfico.
+                Select a metric from the list to start building your chart.
               </p>
             </div>
           )}
@@ -263,7 +264,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         <div className="lg:col-span-1 bg-gray-900/50 p-4 rounded-lg">
           <input
             type="text"
-            placeholder="Buscar métricas..."
+            placeholder="Search metrics..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-gray-700 border border-gray-600 rounded-md px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -276,23 +277,63 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
                   <h4 className="font-bold text-sm text-blue-400 uppercase mb-2">
                     {category}
                   </h4>
-                  {metrics.map((metric) => (
-                    <div key={metric.key} className="flex items-center mb-1">
-                      <input
-                        type="checkbox"
-                        id={metric.key}
-                        checked={selectedMetrics.includes(metric.key)}
-                        onChange={() => handleMetricToggle(metric.key)}
-                        className="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
-                      />
-                      <label
-                        htmlFor={metric.key}
-                        className="ml-2 text-sm text-gray-300 cursor-pointer"
+                  {metrics.map((metric, mIndex) => {
+                    const dataPoints = intermediate
+                      .map((item) => {
+                        let value: number | null = null;
+                        if (metric.type === "time") {
+                          const parts = metric.key.split(".");
+                          const subKey = parts.pop() as keyof Summary;
+                          const summaryKey = parts.join(".");
+                          const summariesMap =
+                            item.summaries as unknown as Record<
+                              string,
+                              Record<string, number> | undefined
+                            >;
+                          value =
+                            summariesMap[summaryKey]?.[subKey as string] ??
+                            null;
+                        } else {
+                          // try rates first, then counters
+                          value =
+                            item.rates[metric.key] ??
+                            item.counters[metric.key] ??
+                            null;
+                        }
+                        return { x: parseInt(item.period), y: value };
+                      })
+                      .filter((d) => d.y !== null)
+                      .sort((a, b) => a.x - b.x);
+
+                    return (
+                      <div
+                        key={metric.key}
+                        className="flex items-center justify-between mb-1"
                       >
-                        {metric.label}
-                      </label>
-                    </div>
-                  ))}
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id={metric.key}
+                            checked={selectedMetrics.includes(metric.key)}
+                            onChange={() => handleMetricToggle(metric.key)}
+                            className="h-4 w-4 rounded bg-gray-700 border-gray-600 text-blue-600 focus:ring-blue-500"
+                          />
+                          <label
+                            htmlFor={metric.key}
+                            className="ml-2 text-sm text-gray-300 cursor-pointer max-w-40 truncate"
+                          >
+                            {metric.label}
+                          </label>
+                        </div>
+                        <div className="w-16 h-6 ml-3">
+                          <Sparkline
+                            data={dataPoints}
+                            color={COLORS[mIndex % COLORS.length]}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )
             )}
@@ -302,7 +343,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
               onClick={() => setSelectedMetrics([])}
               className="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
             >
-              Limpar
+              Clear
             </button>
           </div>
         </div>

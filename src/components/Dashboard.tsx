@@ -12,7 +12,13 @@ import { ChartPie, Eye, File, RefreshCcw } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
 import { Button } from "./ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "./ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "./ui/card";
 
 interface DashboardProps {
   data: ArtilleryData;
@@ -64,7 +70,7 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
 
           <Button variant="action" onClick={onReset}>
             <RefreshCcw />
-            Novo Relatório
+            New Report
           </Button>
         </div>
 
@@ -73,30 +79,36 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
         <TabsContent value="overview" className="space-y-6 animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             <StatCard
-              title="VUsers Criados"
+              title="VUsers Created"
               value={vusersCreated.toLocaleString("pt-BR")}
             />
             <Card className="col-span-1">
-              <CardDescription>
-                Conclusão
-              </CardDescription>
+              <CardDescription>Completion</CardDescription>
               <CardContent>
-                <p className="text-2xl text-green-400 font-bold">
-                  {vusersCompleted.toLocaleString("pt-BR")}
-                </p>
-                <p className="text-sm text-green-400">
-                  {completionRate.toFixed(2)}%
-                </p>
-                <p className="text-2xl text-red-400 font-bold mt-2">
-                  {vusersFailed.toLocaleString("pt-BR")}
-                </p>
-                <p className="text-sm text-red-400">{failureRate.toFixed(2)}%</p>
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <p className="text-2xl text-green-400 font-bold">
+                      {vusersCompleted.toLocaleString("pt-BR")}
+                    </p>
+                    <p className="text-sm text-green-400">
+                      {completionRate.toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-2xl text-red-400 font-bold">
+                      {vusersFailed.toLocaleString("pt-BR")}
+                    </p>
+                    <p className="text-sm text-red-400">
+                      {failureRate.toFixed(2)}%
+                    </p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
-            <StatCard title="Média de Req/s" value={avgReqs.toFixed(1)} />
-            <StatCard title="Pico de Req/s" value={peakReqs.toFixed(1)} />
+            <StatCard title="Average Req/s" value={avgReqs.toFixed(1)} />
+            <StatCard title="Peak Req/s" value={peakReqs.toFixed(1)} />
             <StatCard
-              title="Total Requisições"
+              title="Total Requests"
               value={(aggregate.counters["http.requests"] || 0).toLocaleString(
                 "pt-BR"
               )}
@@ -114,7 +126,7 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
 
           <Card>
             <CardHeader>
-              <CardTitle>Métricas ao Longo do Tempo</CardTitle>
+              <CardTitle>Load Summary</CardTitle>
             </CardHeader>
             <CardContent>
               <TimeSeriesChart intermediateData={intermediate} />
@@ -124,7 +136,7 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <Card className="lg:col-span-2">
               <CardHeader>
-                <CardTitle>Performance HTTP</CardTitle>
+                <CardTitle>HTTP Performance</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponseTimeChart
@@ -134,7 +146,7 @@ function Dashboard({ data, fileName, onReset }: DashboardProps) {
             </Card>
             <Card className="flex flex-col items-center justify-center">
               <CardHeader>
-                <CardTitle>Distribuição de Respostas</CardTitle>
+                <CardTitle>Requests Breakdown by URL</CardTitle>
               </CardHeader>
               <CardContent>
                 <HttpCodesChart counters={aggregate.counters} />
