@@ -35,27 +35,70 @@ interface TimeSeriesChartProps {
 const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   intermediateData,
 }) => {
+  const crosshairPlugin = {
+    id: "crosshair",
+    afterDraw: (chart: ChartJS<"line">) => {
+      if (chart.tooltip?.getActiveElements().length) {
+        const ctx = chart.ctx;
+        const activePoint = chart.tooltip.getActiveElements()[0];
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.stroke();
+        ctx.restore();
+      }
+    },
+  };
+
   const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      mode: "index",
+      intersect: false,
+    },
+    hover: {
+      mode: "index",
+      intersect: false,
+    },
     plugins: {
       legend: {
-        position: "bottom" as const,
+        position: "bottom",
         labels: {
           color: "#A0AEC0",
-          boxWidth: 12,
-          padding: 20,
+          usePointStyle: true,
+          pointStyle: "rectRounded",
+          boxWidth: 10,
+          boxHeight: 10,
         },
       },
       tooltip: {
         mode: "index",
         intersect: false,
         backgroundColor: "rgba(0,0,0,0.8)",
+        displayColors: true,
+        usePointStyle: true,
         titleFont: {
           weight: "bold",
         },
         bodyFont: {
           size: 12,
+        },
+        callbacks: {
+          title: (context) => {
+            const date = new Date(context[0].parsed.x || "");
+            return date.toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "2-digit",
+            });
+          },
         },
       },
     },
@@ -71,6 +114,8 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         },
         ticks: {
           color: "#A0AEC0",
+          maxTicksLimit: 15,
+          autoSkip: true,
         },
       },
       y: {
@@ -79,7 +124,7 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
         position: "left",
         title: {
           display: true,
-          text: "VUsers / Requests per Second",
+          text: "VUsers",
           color: "#A0AEC0",
         },
         grid: {
@@ -99,7 +144,23 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           color: "#A0AEC0",
         },
         grid: {
-          drawOnChartArea: false, // only show the grid for the main Y axis
+          drawOnChartArea: false,
+        },
+        ticks: {
+          color: "#A0AEC0",
+        },
+      },
+      y2: {
+        type: "linear",
+        display: true,
+        position: "left",
+        title: {
+          display: true,
+          text: "Request Rate (req/s)",
+          color: "#A0AEC0",
+        },
+        grid: {
+          drawOnChartArea: false,
         },
         ticks: {
           color: "#A0AEC0",
@@ -116,11 +177,12 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           x: parseInt(item.period),
           y: item.rates["http.request_rate"] || 0,
         })),
-        borderColor: "#F97316", // Orange
+        borderColor: "#F97316",
         backgroundColor: "rgba(249, 115, 22, 0.1)",
-        tension: 0,
-        yAxisID: "y",
+        yAxisID: "y2",
         fill: true,
+        pointHoverRadius: 5,
+        pointStyle: "rectRounded",
       },
       {
         label: "Response Time p95 (ms)",
@@ -128,11 +190,12 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           x: parseInt(item.period),
           y: item.summaries["http.response_time"]?.p95 || null,
         })),
-        borderColor: "#38BDF8", // Light Blue
+        borderColor: "#38BDF8",
         backgroundColor: "rgba(56, 189, 248, 0.1)",
-        tension: 0,
         yAxisID: "y1",
         fill: true,
+        pointHoverRadius: 5,
+        pointStyle: "rectRounded",
       },
       {
         label: "VUsers Created",
@@ -140,12 +203,12 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           x: parseInt(item.period),
           y: item.counters["vusers.created"] || 0,
         })),
-        borderColor: "#A78BFA", // Violet
+        borderColor: "#A78BFA",
         backgroundColor: "rgba(167, 139, 250, 0.1)",
-        tension: 0,
         yAxisID: "y",
         fill: false,
-        pointRadius: 2,
+        pointHoverRadius: 5,
+        pointStyle: "rectRounded",
       },
       {
         label: "VUsers Failed",
@@ -153,12 +216,12 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           x: parseInt(item.period),
           y: item.counters["vusers.failed"] || 0,
         })),
-        borderColor: "#F43F5E", // Rose
+        borderColor: "#F43F5E",
         backgroundColor: "rgba(244, 63, 94, 0.1)",
-        tension: 0,
         yAxisID: "y",
         fill: false,
-        pointRadius: 2,
+        pointHoverRadius: 5,
+        pointStyle: "rectRounded",
       },
       {
         label: "VUsers Completed",
@@ -166,19 +229,18 @@ const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
           x: parseInt(item.period),
           y: item.counters["vusers.completed"] || 0,
         })),
-        borderColor: "#22C55E", // Green
-        backgroundColor: "rgba(34, 197, 94, 0.1)",
-        tension: 0,
+        borderColor: "#22C55E",
         yAxisID: "y",
         fill: false,
-        pointRadius: 2,
+        pointHoverRadius: 5,
+        pointStyle: "rectRounded",
       },
     ],
   };
 
   return (
     <div style={{ height: "450px" }}>
-      <Line options={options} data={data} />
+      <Line options={options} data={data} plugins={[crosshairPlugin]} />
     </div>
   );
 };

@@ -59,6 +59,28 @@ const MetricChart: React.FC<MetricChartProps> = ({
   yAxisLabel,
   yAxisType = "count",
 }) => {
+  const crosshairPlugin = {
+    id: "crosshair",
+    afterDraw: (chart: ChartJS<"line">) => {
+      if (chart.tooltip?.getActiveElements().length) {
+        const ctx = chart.ctx;
+        const activePoint = chart.tooltip.getActiveElements()[0];
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.stroke();
+        ctx.restore();
+      }
+    },
+  };
+
   const chartOptions: ChartOptions<"line"> = useMemo(
     () => ({
       responsive: true,
@@ -68,28 +90,31 @@ const MetricChart: React.FC<MetricChartProps> = ({
           position: "bottom",
           labels: {
             color: "#A0AEC0",
-            boxWidth: 12,
-            padding: 15,
+            usePointStyle: true,
+            pointStyle: "rectRounded",
+            boxWidth: 10,
+            boxHeight: 10,
           },
         },
         tooltip: {
           mode: "index",
           intersect: false,
           backgroundColor: "rgba(0,0,0,0.8)",
+          displayColors: true,
+          usePointStyle: true,
+          titleFont: {
+            weight: "bold",
+          },
+          bodyFont: {
+            size: 12,
+          },
           callbacks: {
-            label: function (context) {
-              let label = context.dataset.label || "";
-              if (label) {
-                label += ": ";
-              }
-              if (context.parsed.y !== null) {
-                const value = context.parsed.y;
-                if (yAxisType === "bytes") label += formatBytes(value);
-                else if (yAxisType === "time")
-                  label += `${value.toFixed(2)} ms`;
-                else label += value.toLocaleString("en-US");
-              }
-              return label;
+            title: (context) => {
+              const date = new Date(context[0].parsed.x || "");
+              return date.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+              });
             },
           },
         },
@@ -99,7 +124,10 @@ const MetricChart: React.FC<MetricChartProps> = ({
           type: "time",
           time: { tooltipFormat: "T", unit: "second" },
           grid: { color: "rgba(255, 255, 255, 0.1)" },
-          ticks: { color: "#A0AEC0" },
+          ticks: {
+            color: "#A0AEC0",
+            maxTicksLimit: 5,
+          },
         },
         y: {
           title: { display: true, text: yAxisLabel, color: "#A0AEC0" },
@@ -138,13 +166,12 @@ const MetricChart: React.FC<MetricChartProps> = ({
           data: dataPoints,
           borderColor: COLORS[index % COLORS.length],
           backgroundColor: `${COLORS[index % COLORS.length]}4D`, // 30% opacity
-          tension: 0.2,
-          pointRadius: 1.5,
-          borderWidth: 2,
           fill: metric.isFilled || false,
+          pointHoverRadius: 5,
+          pointStyle: "rectRounded",
         };
       })
-      .filter(Boolean); // Filter out null datasets
+      .filter(Boolean);
 
     return { datasets };
   }, [metrics, intermediateData]);
@@ -168,6 +195,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
         <Line
           options={chartOptions}
           data={chartData as unknown as ChartData<"line">}
+          plugins={[crosshairPlugin]}
         />
       </div>
     </div>
