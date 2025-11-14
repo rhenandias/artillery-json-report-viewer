@@ -1,3 +1,0 @@
-- Responda sempre em Português (pt-BR)
-- There is no need to execute lint, build or other commands after task execution
-- When answering a question, do not start with compliments to the user, such as "That's an excellent observation", "That's an excellent question", in general, do not "flatter" the user
