@@ -60,7 +60,7 @@ const MetricsSidebar: React.FC<MetricsSidebarProps> = ({
   return (
     <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
       <h3 className="text-lg font-bold text-white mb-4">Metrics</h3>
-      <div className="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+      <div className="space-y-4">
         {Object.entries(groupedMetrics).map(([category, configs]) => (
           <div key={category}>
             <h4 className="font-bold text-sm text-blue-400 uppercase mb-2 tracking-wider">

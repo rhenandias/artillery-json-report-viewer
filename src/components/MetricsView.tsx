@@ -153,7 +153,7 @@ const MetricsView: React.FC<{ data: ArtilleryData }> = ({ data }) => {
   const sanitizedTitle = (title: string) =>
     title.replace(/[^a-zA-Z0-9-]/g, "-");
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-[2fr_1fr] gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-[3fr_1fr] gap-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {chartConfigs.map((config) => (
           <Card key={config.title} id={`chart-${sanitizedTitle(config.title)}`}>
