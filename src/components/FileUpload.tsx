@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
-import { Alert, AlertDescription } from "./ui/alert";
-import { CloudUpload } from "lucide-react";
+import React, { useRef, useState } from 'react';
+import { Alert, AlertDescription } from './ui/alert';
+import { CloudUpload } from 'lucide-react';
 
 interface FileUploadProps {
   onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -51,8 +51,8 @@ function FileUpload({ onFileUpload, error }: FileUploadProps) {
         <div
           className={`cursor-pointer block w-full bg-gray-800 border-2 border-dashed rounded-lg p-10 transition duration-300 ${
             isDragging
-              ? "border-blue-500 bg-gray-700"
-              : "border-gray-600 hover:border-blue-500 hover:bg-gray-700"
+              ? 'border-blue-500 bg-gray-700'
+              : 'border-gray-600 hover:border-blue-500 hover:bg-gray-700'
           }`}
           onDragOver={handleDragOver}
           onDragEnter={handleDragEnter}
@@ -64,11 +64,11 @@ function FileUpload({ onFileUpload, error }: FileUploadProps) {
             <CloudUpload size={50} />
 
             <p className="text-xl font-semibold text-white">
-              {isDragging ? "Drop to upload" : "Click to upload report"}
+              {isDragging ? 'Drop to upload' : 'Click to upload report'}
             </p>
 
             <p className="text-gray-400 mt-1">
-              {isDragging ? "" : "Or drag and drop the JSON file here"}
+              {isDragging ? '' : 'Or drag and drop the JSON file here'}
             </p>
           </div>
         </div>

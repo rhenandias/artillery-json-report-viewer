@@ -1,5 +1,5 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,8 +9,8 @@ import {
   Tooltip,
   Legend,
   type ChartOptions,
-} from "chart.js";
-import type { Summary } from "../types";
+} from 'chart.js';
+import type { Summary } from '../types';
 
 ChartJS.register(
   CategoryScale,
@@ -18,14 +18,14 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface ResponseTimeChartProps {
   summary?: Summary;
 }
 
-const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
+function ResponseTimeChart({ summary }: ResponseTimeChartProps) {
   if (!summary) {
     return (
       <p className="text-center text-gray-400">
@@ -34,8 +34,8 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
     );
   }
 
-  const options: ChartOptions<"bar"> = {
-    indexAxis: "y" as const,
+  const options: ChartOptions<'bar'> = {
+    indexAxis: 'y' as const,
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -51,16 +51,16 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
     scales: {
       x: {
         grid: {
-          color: "rgba(255, 255, 255, 0.1)",
+          color: 'rgba(255, 255, 255, 0.1)',
         },
         ticks: {
-          color: "#A0AEC0",
+          color: '#A0AEC0',
           callback: (value) => `${value} ms`,
         },
         title: {
           display: true,
-          text: "Response Time",
-          color: "#A0AEC0",
+          text: 'Response Time',
+          color: '#A0AEC0',
         },
       },
       y: {
@@ -68,16 +68,16 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
           display: false,
         },
         ticks: {
-          color: "#A0AEC0",
+          color: '#A0AEC0',
           font: {
-            weight: "bold",
+            weight: 'bold',
           },
         },
       },
     },
   };
 
-  const labels = ["min", "mean", "p50", "p75", "p90", "p95", "p99", "max"];
+  const labels = ['min', 'mean', 'p50', 'p75', 'p90', 'p95', 'p99', 'max'];
   const dataValues = [
     summary.min,
     summary.mean,
@@ -93,27 +93,27 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
     labels,
     datasets: [
       {
-        label: "Response Time (ms)",
+        label: 'Response Time (ms)',
         data: dataValues,
         backgroundColor: [
-          "#0284C7",
-          "#0369A1",
-          "#075985",
-          "#0891B2",
-          "#06B6D4",
-          "#22D3EE",
-          "#67E8F9",
-          "#A5F3FC",
+          '#0284C7',
+          '#0369A1',
+          '#075985',
+          '#0891B2',
+          '#06B6D4',
+          '#22D3EE',
+          '#67E8F9',
+          '#A5F3FC',
         ],
         borderColor: [
-          "#0EA5E9",
-          "#38BDF8",
-          "#7DD3FC",
-          "#06B6D4",
-          "#22D3EE",
-          "#67E8F9",
-          "#A5F3FC",
-          "#CFFAFE",
+          '#0EA5E9',
+          '#38BDF8',
+          '#7DD3FC',
+          '#06B6D4',
+          '#22D3EE',
+          '#67E8F9',
+          '#A5F3FC',
+          '#CFFAFE',
         ],
         borderWidth: 1,
       },
@@ -121,10 +121,10 @@ const ResponseTimeChart: React.FC<ResponseTimeChartProps> = ({ summary }) => {
   };
 
   return (
-    <div style={{ height: "400px" }}>
+    <div style={{ height: '400px' }}>
       <Bar options={options} data={data} />
     </div>
   );
-};
+}
 
 export default ResponseTimeChart;

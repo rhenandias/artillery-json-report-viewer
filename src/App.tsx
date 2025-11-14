@@ -1,13 +1,13 @@
-import React, { useState, useCallback } from "react";
-import Dashboard from "./components/Dashboard";
-import FileUpload from "./components/FileUpload";
-import { Button } from "./components/ui/button";
-import type { ArtilleryData } from "./types";
+import React, { useState, useCallback } from 'react';
+import Dashboard from './components/Dashboard';
+import FileUpload from './components/FileUpload';
+import { Button } from './components/ui/button';
+import type { ArtilleryData } from './types';
 
 function App() {
   const [reportData, setReportData] = useState<ArtilleryData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string>("");
+  const [fileName, setFileName] = useState<string>('');
 
   const handleFileUpload = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +22,7 @@ function App() {
           try {
             const content = e.target?.result;
 
-            if (typeof content === "string") {
+            if (typeof content === 'string') {
               const data = JSON.parse(content);
 
               // Basic validation to check if it looks like an Artillery report
@@ -31,13 +31,13 @@ function App() {
                 setError(null);
               } else {
                 throw new Error(
-                  "Invalid JSON file or not an Artillery report."
+                  'Invalid JSON file or not an Artillery report.',
                 );
               }
             }
           } catch (err) {
             setError(
-              "Failed to process the file. Ensure it is a valid Artillery JSON."
+              'Failed to process the file. Ensure it is a valid Artillery JSON.',
             );
             setReportData(null);
             console.error(err);
@@ -45,20 +45,20 @@ function App() {
         };
 
         reader.onerror = () => {
-          setError("Failed to read the file.");
+          setError('Failed to read the file.');
           setReportData(null);
         };
 
         reader.readAsText(file);
       }
     },
-    []
+    [],
   );
 
   const handleReset = useCallback(() => {
     setReportData(null);
     setError(null);
-    setFileName("");
+    setFileName('');
   }, []);
 
   return (

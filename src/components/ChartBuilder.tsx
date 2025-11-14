@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Line } from "react-chartjs-2";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -10,11 +10,11 @@ import {
   Legend,
   TimeScale,
   type ChartOptions,
-} from "chart.js";
-import "chartjs-adapter-date-fns";
-import type { ArtilleryData, Summary } from "../types";
-import { CardTitle } from "./ui/card";
-import Sparkline from "./Sparkline";
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import type { ArtilleryData, Summary } from '../types';
+import { CardTitle } from './ui/card';
+import Sparkline from './Sparkline';
 
 ChartJS.register(
   LinearScale,
@@ -23,7 +23,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  TimeScale
+  TimeScale,
 );
 
 interface ChartBuilderProps {
@@ -34,29 +34,29 @@ interface Metric {
   key: string;
   label: string;
   category: string;
-  type: "count" | "time";
+  type: 'count' | 'time';
 }
 
 const COLORS = [
-  "#38bdf8",
-  "#f97316",
-  "#22c55e",
-  "#f43f5e",
-  "#a78bfa",
-  "#facc15",
-  "#e11d48",
-  "#14b8a6",
-  "#8b5cf6",
-  "#d946ef",
-  "#ec4899",
-  "#65a30d",
+  '#38bdf8',
+  '#f97316',
+  '#22c55e',
+  '#f43f5e',
+  '#a78bfa',
+  '#facc15',
+  '#e11d48',
+  '#14b8a6',
+  '#8b5cf6',
+  '#d946ef',
+  '#ec4899',
+  '#65a30d',
 ];
 
-const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
+function ChartBuilder({ data }: ChartBuilderProps) {
   const { intermediate } = data;
   const [availableMetrics, setAvailableMetrics] = useState<Metric[]>([]);
   const [selectedMetrics, setSelectedMetrics] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (!intermediate || intermediate.length === 0) return;
@@ -75,14 +75,14 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           discoveredMetrics.set(key, {
             key,
             label: key
-              .replace("errors.", "Error: ")
-              .replace("http.codes.", "HTTP "),
-            category: key.startsWith("errors.")
-              ? "Errors"
-              : key.startsWith("http.")
-              ? "HTTP"
-              : "VUsers",
-            type: "count",
+              .replace('errors.', 'Error: ')
+              .replace('http.codes.', 'HTTP '),
+            category: key.startsWith('errors.')
+              ? 'Errors'
+              : key.startsWith('http.')
+                ? 'HTTP'
+                : 'VUsers',
+            type: 'count',
           });
         }
       }
@@ -96,8 +96,8 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           discoveredMetrics.set(key, {
             key,
             label: key,
-            category: "Rates",
-            type: "count",
+            category: 'Rates',
+            type: 'count',
           });
         }
       }
@@ -109,18 +109,18 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
           for (const subKey in summary) {
             if (
               typeof (summary as unknown as Record<string, unknown>)[subKey] ===
-              "number"
+              'number'
             ) {
               const fullKey = `${summaryKey}.${subKey}`;
               if (!discoveredMetrics.has(fullKey)) {
                 discoveredMetrics.set(fullKey, {
                   key: fullKey,
                   label: `${summaryKey.replace(
-                    "http.response_time",
-                    "Response Time"
+                    'http.response_time',
+                    'Response Time',
                   )} (${subKey})`,
-                  category: "Response Time",
-                  type: "time",
+                  category: 'Response Time',
+                  type: 'time',
                 });
               }
             }
@@ -137,7 +137,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         if (a.label < b.label) return -1;
         if (a.label > b.label) return 1;
         return 0;
-      }
+      },
     );
 
     setAvailableMetrics(sortedMetrics);
@@ -147,48 +147,48 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
     setSelectedMetrics((prev) =>
       prev.includes(metricKey)
         ? prev.filter((m) => m !== metricKey)
-        : [...prev, metricKey]
+        : [...prev, metricKey],
     );
   };
 
-  const chartOptions: ChartOptions<"line"> = useMemo(
+  const chartOptions: ChartOptions<'line'> = useMemo(
     () => ({
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: "bottom", labels: { color: "#A0AEC0" } },
+        legend: { position: 'bottom', labels: { color: '#A0AEC0' } },
         tooltip: {
-          mode: "index",
+          mode: 'index',
           intersect: false,
-          backgroundColor: "rgba(0,0,0,0.8)",
+          backgroundColor: 'rgba(0,0,0,0.8)',
         },
       },
       scales: {
         x: {
-          type: "time",
-          time: { tooltipFormat: "T", unit: "second" },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
-          ticks: { color: "#A0AEC0" },
+          type: 'time',
+          time: { tooltipFormat: 'T', unit: 'second' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          ticks: { color: '#A0AEC0' },
         },
         y: {
-          type: "linear",
+          type: 'linear',
           display: true,
-          position: "left",
-          title: { display: true, text: "Count / Rate", color: "#A0AEC0" },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
-          ticks: { color: "#A0AEC0" },
+          position: 'left',
+          title: { display: true, text: 'Count / Rate', color: '#A0AEC0' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
+          ticks: { color: '#A0AEC0' },
         },
         y1: {
-          type: "linear",
+          type: 'linear',
           display: true,
-          position: "right",
-          title: { display: true, text: "Time (ms)", color: "#A0AEC0" },
+          position: 'right',
+          title: { display: true, text: 'Time (ms)', color: '#A0AEC0' },
           grid: { drawOnChartArea: false },
-          ticks: { color: "#A0AEC0" },
+          ticks: { color: '#A0AEC0' },
         },
       },
     }),
-    []
+    [],
   );
 
   const chartData = useMemo(() => {
@@ -198,14 +198,14 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         let value: number | null = null;
 
         if (metricInfo) {
-          if (metricInfo.category === "Response Time") {
-            const parts = metricKey.split(".");
+          if (metricInfo.category === 'Response Time') {
+            const parts = metricKey.split('.');
             const subKey = parts.pop() as keyof Summary;
-            const summaryKey = parts.join(".");
+            const summaryKey = parts.join('.');
             if (summaryKey && subKey && item.summaries[summaryKey]) {
               value = item.summaries[summaryKey]?.[subKey] ?? null;
             }
-          } else if (metricInfo.category === "Rates") {
+          } else if (metricInfo.category === 'Rates') {
             value = item.rates[metricKey] ?? null;
           } else {
             // Counters (VUsers, HTTP, Erros)
@@ -221,7 +221,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
         borderColor: COLORS[index % COLORS.length],
         backgroundColor: `${COLORS[index % COLORS.length]}1A`, // with alpha
         tension: 0.3,
-        yAxisID: metricInfo?.type === "time" ? "y1" : "y",
+        yAxisID: metricInfo?.type === 'time' ? 'y1' : 'y',
         pointRadius: 2,
         borderWidth: 2,
       };
@@ -233,7 +233,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
   const groupedMetrics = useMemo(() => {
     const groups: { [category: string]: Metric[] } = {};
     const filtered = availableMetrics.filter((m) =>
-      m.label.toLowerCase().includes(searchTerm.toLowerCase())
+      m.label.toLowerCase().includes(searchTerm.toLowerCase()),
     );
     for (const metric of filtered) {
       if (!groups[metric.category]) {
@@ -250,7 +250,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3">
           {selectedMetrics.length > 0 ? (
-            <div style={{ height: "450px" }}>
+            <div style={{ height: '450px' }}>
               <Line options={chartOptions} data={chartData} />
             </div>
           ) : (
@@ -281,10 +281,10 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
                     const dataPoints = intermediate
                       .map((item) => {
                         let value: number | null = null;
-                        if (metric.type === "time") {
-                          const parts = metric.key.split(".");
+                        if (metric.type === 'time') {
+                          const parts = metric.key.split('.');
                           const subKey = parts.pop() as keyof Summary;
-                          const summaryKey = parts.join(".");
+                          const summaryKey = parts.join('.');
                           const summariesMap =
                             item.summaries as unknown as Record<
                               string,
@@ -335,7 +335,7 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
                     );
                   })}
                 </div>
-              )
+              ),
             )}
           </div>
           <div className="mt-4 flex gap-2">
@@ -350,6 +350,6 @@ const ChartBuilder: React.FC<ChartBuilderProps> = ({ data }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ChartBuilder;
