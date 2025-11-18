@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Line } from 'react-chartjs-2';
 import type { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-date-fns';

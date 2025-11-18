@@ -10,7 +10,7 @@ import {
   type ChartOptions,
   type Plugin,
 } from 'chart.js';
-import type { Summary } from '../types';
+import type { Summary } from '@/types';
 
 ChartJS.register(
   CategoryScale,
@@ -40,7 +40,7 @@ function ResponseTimeChart({ summary }: ResponseTimeChartProps) {
   const metrics = Object.entries(allMetrics)
     .filter(([_, value]) => value !== undefined)
     .reduce(
-      (acc, [key, value]) => ({ ...acc, [key]: value }),
+      (acc, [key, value]) => ({ ...acc, [key]: value as number }),
       {} as { [key: string]: number },
     );
 

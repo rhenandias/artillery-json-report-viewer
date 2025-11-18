@@ -1,7 +1,7 @@
-import React from 'react';
+
 import { Line } from 'react-chartjs-2';
 import type { ChartOptions } from 'chart.js';
-import type { IntermediateData } from '../types';
+import type { IntermediateData } from '@/types';
 
 interface EndpointDetailChartProps {
   endpointName: string;
@@ -68,7 +68,7 @@ function EndpointDetailChart({
 
   const data = {
     datasets: percentiles.map((p) => ({
-      label: p === 'mean' ? 'mean' : p,
+      label: String(p === 'mean' ? 'mean' : p),
       data: intermediateData.map((item) => ({
         x: parseInt(item.period),
         y: item.summaries[responseTimeKey]?.[p] ?? null,

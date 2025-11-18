@@ -1,6 +1,16 @@
-import type { ArtilleryData } from '../../../../types';
-import { Card, CardHeader, CardTitle, CardContent } from '../../../../components/ui/card';
-import { Table, TableBody, TableCell, TableRow } from '../../../../components/ui/table';
+import type { ArtilleryData } from '@/types';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@/components/ui/table';
 
 interface SummaryViewProps {
   data: ArtilleryData;

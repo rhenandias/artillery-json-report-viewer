@@ -1,11 +1,16 @@
-import type { ArtilleryData } from '../../types';
+import type { ArtilleryData } from '@/types';
 import OverviewView from './views/overview/OverviewView';
 import MetricsView from './views/metrics/MetricsView';
 import SummaryView from './views/summary/SummaryView';
 import { ChartPie, Eye, File, RefreshCcw, FileText } from 'lucide-react';
-import { Separator } from '../../components/ui/separator';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../components/ui/tabs';
-import { Button } from '../../components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 
 interface DashboardProps {
   data: ArtilleryData;

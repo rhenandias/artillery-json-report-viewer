@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,9 +14,9 @@ import {
   type ChartData,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import type { IntermediateData } from '../types';
-import { formatBytes } from '../utils/formatters';
-import { getMetricValue } from '../utils/metrics';
+import type { IntermediateData } from '@/types';
+import { formatBytes } from '@/utils/formatters';
+import { getMetricValue } from '@/utils/metrics';
 
 ChartJS.register(
   LinearScale,

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -14,7 +14,7 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import type { IntermediateData } from '../types';
+import type { IntermediateData } from '@/types';
 
 ChartJS.register(
   CategoryScale,
