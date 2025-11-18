@@ -1,19 +1,19 @@
-import type { ArtilleryData } from '../types';
-import StatCard from './StatCard';
-import TimeSeriesChart from './TimeSeriesChart';
-import ResponseTimeChart from './ResponseTimeChart';
-import HttpCodesChart from './HttpCodesChart';
-import ChartBuilder from './ChartBuilder';
-import EndpointBreakdown from './EndpointBreakdown';
-import ErrorsCard from './ErrorsCard';
-import MetadataCard from './MetadataCard';
+import type { ArtilleryData } from '../../../../types';
+import StatCard from '../../components/StatCard';
+import TimeSeriesChart from './components/TimeSeriesChart';
+import ResponseTimeChart from './components/ResponseTimeChart';
+import HttpCodesChart from './components/HttpCodesChart';
+import ChartBuilder from './components/ChartBuilder';
+import EndpointBreakdown from './components/EndpointBreakdown';
+import ErrorsCard from '../../components/ErrorsCard';
+import MetadataCard from '../../components/MetadataCard';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
-} from './ui/card';
+} from '../../../../components/ui/card';
 
 interface OverviewViewProps {
   data: ArtilleryData;

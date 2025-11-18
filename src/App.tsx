@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Dashboard from './components/Dashboard';
+import Dashboard from './pages/dashboard/Dashboard';
 import FileUpload from './components/FileUpload';
 import { Button } from './components/ui/button';
 import type { ArtilleryData } from './types';
