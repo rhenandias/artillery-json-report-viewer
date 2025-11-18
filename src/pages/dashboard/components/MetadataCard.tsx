@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
-import type { IntermediateData } from '../types';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import type { IntermediateData } from '@/types';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Calendar, Clock, Code } from 'lucide-react';
 
 interface MetadataCardProps {

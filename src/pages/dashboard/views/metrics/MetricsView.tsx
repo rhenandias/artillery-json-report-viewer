@@ -1,8 +1,8 @@
-import React from 'react';
-import type { ArtilleryData } from '../types';
-import MetricChart from './MetricChart';
-import MetricsSidebar from './MetricsSidebar';
-import { Card, CardContent } from './ui/card';
+
+import type { ArtilleryData } from '../../../../types';
+import MetricChart from './components/MetricChart';
+import MetricsSidebar from './components/MetricsSidebar';
+import { Card, CardContent } from '@/components/ui/card';
 
 const chartConfigs = [
   {

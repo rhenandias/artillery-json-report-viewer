@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ChevronRight } from 'lucide-react';
-import type { ArtilleryData } from '../types';
-import EndpointDetailChart from './EndpointDetailChart';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
+import type { ArtilleryData } from '@/types';
+import EndpointDetailChart from '@/pages/dashboard/views/metrics/components/EndpointDetailChart';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface EndpointMetric {
   codes: { [code: string]: number };

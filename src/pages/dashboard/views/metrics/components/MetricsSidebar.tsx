@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
-import type { ArtilleryData } from '../types';
-import { getMetricValue } from '../utils/metrics';
-import Sparkline from './Sparkline';
+import { useMemo } from 'react';
+import type { ArtilleryData } from '@/types';
+import { getMetricValue } from '@/utils/metrics';
+import Sparkline from '@/components/Sparkline';
 
 const COLORS = [
   '#f43f5e',

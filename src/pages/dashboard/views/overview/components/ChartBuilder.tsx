@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -12,9 +12,9 @@ import {
   type ChartOptions,
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import type { ArtilleryData, Summary } from '../types';
-import { CardTitle } from './ui/card';
-import Sparkline from './Sparkline';
+import type { ArtilleryData, Summary } from '@/types';
+import { CardTitle } from '@/components/ui/card';
+import Sparkline from '@/components/Sparkline';
 
 ChartJS.register(
   LinearScale,

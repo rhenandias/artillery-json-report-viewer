@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import Dashboard from './components/Dashboard';
-import FileUpload from './components/FileUpload';
-import { Button } from './components/ui/button';
-import type { ArtilleryData } from './types';
+import FileUpload from '@/components/FileUpload';
+import { Button } from '@/components/ui/button';
+import type { ArtilleryData } from '@/types';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   const [reportData, setReportData] = useState<ArtilleryData | null>(null);
