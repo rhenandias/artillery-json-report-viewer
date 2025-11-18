@@ -29,3 +29,6 @@ vibe-coded
 .gemini
 copilot-instructions.md
 files
+
+# Artillery Reports
+mock-api/reports/*.json

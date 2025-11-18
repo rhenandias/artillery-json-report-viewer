@@ -1,0 +1,49 @@
+config:
+  target: 'http://localhost:3001'
+
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: 'Basic test - 5 users per second'
+
+  processor: './processor.cjs'
+
+scenarios:
+  - name: 'Complete user flow'
+    weight: 70
+    flow:
+      - get:
+          url: '/health'
+
+      - get:
+          url: '/api/users'
+          capture:
+            - json: '$.data[0].id'
+              as: 'userId'
+
+      - get:
+          url: '/api/users/{{ userId }}'
+
+      - post:
+          url: '/api/users'
+          json:
+            name: '{{ $randomString() }}'
+            email: '{{ $randomString() }}@example.com'
+          capture:
+            - json: '$.id'
+              as: 'newUserId'
+
+      - get:
+          url: '/api/users/{{ newUserId }}'
+
+  - name: 'Read only'
+    weight: 30
+    flow:
+      - get:
+          url: '/api/users?page=1&limit=10'
+
+      - get:
+          url: '/api/users/1'
+
+      - get:
+          url: '/api/users/2'
