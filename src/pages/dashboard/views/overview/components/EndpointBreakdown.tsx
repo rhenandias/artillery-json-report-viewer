@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
-import { ChevronRight } from "lucide-react";
-import type { ArtilleryData } from "../types";
-import EndpointDetailChart from "./EndpointDetailChart";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+import { useMemo, useState } from 'react';
+import { ChevronRight } from 'lucide-react';
+import type { ArtilleryData } from '@/types';
+import EndpointDetailChart from '@/pages/dashboard/views/metrics/components/EndpointDetailChart';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface EndpointMetric {
   codes: { [code: string]: number };
@@ -11,19 +11,23 @@ interface EndpointMetric {
   timeSeries: { x: number; y: number }[];
 }
 
-const getTagColor = (metric: string, type: "bg" | "text") => {
-  if (metric.startsWith("2"))
-    return type === "bg" ? "bg-green-500/20" : "text-green-400";
-  if (metric.startsWith("3"))
-    return type === "bg" ? "bg-sky-500/20" : "text-sky-400";
-  if (metric.startsWith("4"))
-    return type === "bg" ? "bg-yellow-500/20" : "text-yellow-400";
-  if (metric.startsWith("5"))
-    return type === "bg" ? "bg-orange-500/20" : "text-orange-400";
-  return type === "bg" ? "bg-red-500/20" : "text-red-400";
+const getTagColor = (metric: string, type: 'bg' | 'text') => {
+  if (metric.startsWith('2'))
+    return type === 'bg' ? 'bg-green-500/20' : 'text-green-400';
+  if (metric.startsWith('3'))
+    return type === 'bg' ? 'bg-sky-500/20' : 'text-sky-400';
+  if (metric.startsWith('4'))
+    return type === 'bg' ? 'bg-yellow-500/20' : 'text-yellow-400';
+  if (metric.startsWith('5'))
+    return type === 'bg' ? 'bg-orange-500/20' : 'text-orange-400';
+  return type === 'bg' ? 'bg-red-500/20' : 'text-red-400';
 };
 
-const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
+interface EndpointBreakdownProps {
+  data: ArtilleryData;
+}
+
+function EndpointBreakdown({ data }: EndpointBreakdownProps) {
   const [expandedEndpoint, setExpandedEndpoint] = useState<string | null>(null);
 
   const endpointData = useMemo(() => {
@@ -33,7 +37,7 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
     // FIX: Cast the result of Object.entries to correctly type `value` as a number.
     for (const [key, value] of Object.entries(data.aggregate.counters) as [
       string,
-      number
+      number,
     ][]) {
       const match = key.match(regex);
       if (match) {
@@ -46,9 +50,9 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
             timeSeries: [],
           };
         }
-        if (type === "codes") {
+        if (type === 'codes') {
           endpoints[endpointName].codes[metric] = value;
-        } else if (type === "errors") {
+        } else if (type === 'errors') {
           endpoints[endpointName].errors[metric] = value;
         }
       }
@@ -58,11 +62,11 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
       const endpoint = endpoints[endpointName];
       const totalCodes = Object.values(endpoint.codes).reduce(
         (a, b) => a + b,
-        0
+        0,
       );
       const totalErrors = Object.values(endpoint.errors).reduce(
         (a, b) => a + b,
-        0
+        0,
       );
       endpoint.total = totalCodes + totalErrors;
 
@@ -116,15 +120,15 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
                           key={code}
                           className={`text-xs font-semibold px-2 py-1 rounded-full ${getTagColor(
                             code,
-                            "bg"
-                          )} ${getTagColor(code, "text")}`}
+                            'bg',
+                          )} ${getTagColor(code, 'text')}`}
                         >
                           {`HTTP ${code}: ${(
                             (count / metrics.total) *
                             100
                           ).toFixed(1)}%`}
                         </span>
-                      )
+                      ),
                     )}
                     {Object.entries(metrics.errors).map(
                       ([error, count]: [string, number]) => (
@@ -132,27 +136,27 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
                           key={error}
                           className={`text-xs font-semibold px-2 py-1 rounded-full ${getTagColor(
                             error,
-                            "bg"
-                          )} ${getTagColor(error, "text")}`}
+                            'bg',
+                          )} ${getTagColor(error, 'text')}`}
                         >
                           {`${error}: ${((count / metrics.total) * 100).toFixed(
-                            1
+                            1,
                           )}%`}
                         </span>
-                      )
+                      ),
                     )}
                   </div>
                   <div className="flex items-center gap-6">
                     <div className="text-right">
                       <span className="text-sm text-gray-400">Total</span>
                       <p className="font-bold text-white">
-                        {metrics.total.toLocaleString("pt-BR")}
+                        {metrics.total.toLocaleString('pt-BR')}
                       </p>
                     </div>
 
                     <ChevronRight
                       className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${
-                        expandedEndpoint === name ? "rotate-90" : ""
+                        expandedEndpoint === name ? 'rotate-90' : ''
                       }`}
                     />
                   </div>
@@ -167,12 +171,12 @@ const EndpointBreakdown: React.FC<{ data: ArtilleryData }> = ({ data }) => {
                   </div>
                 )}
               </div>
-            )
+            ),
           )}
         </div>
       </CardContent>
     </Card>
   );
-};
+}
 
 export default EndpointBreakdown;

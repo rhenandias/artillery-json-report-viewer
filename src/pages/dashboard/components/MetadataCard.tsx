@@ -1,30 +1,31 @@
-import React, { useMemo } from "react";
-import type { IntermediateData } from "../types";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Calendar, Clock, Code } from "lucide-react";
+import React, { useMemo } from 'react';
+import type { IntermediateData } from '@/types';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Calendar, Clock, Code } from 'lucide-react';
 
 interface MetadataCardProps {
   intermediate: IntermediateData[];
   fileName: string;
 }
 
-const MetadataItem: React.FC<{
+interface MetadataItemProps {
   icon: React.ReactNode;
   label: React.ReactNode;
-}> = ({ icon, label }) => (
-  <div className="flex items-center text-gray-400 text-sm">
-    <div className="w-5 h-5 mr-3 shrink-0">{icon}</div>
-    <div className="truncate font-mono">{label}</div>
-  </div>
-);
+}
 
-const MetadataCard: React.FC<MetadataCardProps> = ({
-  intermediate,
-  fileName,
-}) => {
+function MetadataItem({ icon, label }: MetadataItemProps) {
+  return (
+    <div className="flex items-center text-gray-400 text-sm">
+      <div className="w-5 h-5 mr-3 shrink-0">{icon}</div>
+      <div className="truncate font-mono">{label}</div>
+    </div>
+  );
+}
+
+function MetadataCard({ intermediate, fileName }: MetadataCardProps) {
   const metadata = useMemo(() => {
     if (!intermediate || intermediate.length === 0) {
-      return { id: "", startTimeFormatted: "", duration: "" };
+      return { id: '', startTimeFormatted: '', duration: '' };
     }
 
     const firstPeriod = parseInt(intermediate[0].period);
@@ -33,23 +34,23 @@ const MetadataCard: React.FC<MetadataCardProps> = ({
     const startTime = new Date(firstPeriod);
     // Mimicking the format from the screenshot
     const startTimeFormatted = startTime
-      .toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
+      .toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
         hour12: true,
       })
-      .replace(",", "");
+      .replace(',', '');
 
     const durationInSeconds = Math.round((lastPeriod - firstPeriod) / 1000);
     const minutes = Math.floor(durationInSeconds / 60);
     const seconds = durationInSeconds % 60;
     const duration = `${minutes}m ${seconds}s`;
 
-    const id = fileName.replace(/\.json$/, "");
+    const id = fileName.replace(/\.json$/, '');
 
     return { id, startTimeFormatted, duration };
   }, [intermediate, fileName]);
@@ -71,6 +72,6 @@ const MetadataCard: React.FC<MetadataCardProps> = ({
       </CardContent>
     </Card>
   );
-};
+}
 
 export default MetadataCard;

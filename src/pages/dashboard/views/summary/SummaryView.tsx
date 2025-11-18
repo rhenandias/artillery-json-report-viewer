@@ -1,6 +1,16 @@
-import type { ArtilleryData } from "../types";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Table, TableBody, TableCell, TableRow } from "./ui/table";
+import type { ArtilleryData } from '@/types';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from '@/components/ui/table';
 
 interface SummaryViewProps {
   data: ArtilleryData;
@@ -10,23 +20,23 @@ function SummaryView({ data }: SummaryViewProps) {
   const { aggregate } = data;
 
   const httpCodes = Object.entries(aggregate.counters)
-    .filter(([key]) => key.startsWith("http.codes."))
+    .filter(([key]) => key.startsWith('http.codes.'))
     .map(([key, value]) => ({
-      code: key.replace("http.codes.", ""),
+      code: key.replace('http.codes.', ''),
       count: value,
     }));
 
   const errors = Object.entries(aggregate.counters)
-    .filter(([key]) => key.startsWith("errors."))
+    .filter(([key]) => key.startsWith('errors.'))
     .map(([key, value]) => ({
-      type: key.replace("errors.", ""),
+      type: key.replace('errors.', ''),
       count: value,
     }));
 
-  const responseTime = aggregate.summaries["http.response_time"];
-  const responseTime2xx = aggregate.summaries["http.response_time.2xx"];
-  const responseTime4xx = aggregate.summaries["http.response_time.4xx"];
-  const sessionLength = aggregate.summaries["vusers.session_length"];
+  const responseTime = aggregate.summaries?.['http.response_time'];
+  const responseTime2xx = aggregate.summaries?.['http.response_time.2xx'];
+  const responseTime4xx = aggregate.summaries?.['http.response_time.4xx'];
+  const sessionLength = aggregate.summaries?.['vusers.session_length'];
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -43,7 +53,7 @@ function SummaryView({ data }: SummaryViewProps) {
                     errors.{error.type}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {error.count.toLocaleString("pt-BR")}
+                    {error.count.toLocaleString('pt-BR')}
                   </TableCell>
                 </TableRow>
               ))}
@@ -53,7 +63,7 @@ function SummaryView({ data }: SummaryViewProps) {
                     http.codes.{code.code}
                   </TableCell>
                   <TableCell className="text-right font-semibold">
-                    {code.count.toLocaleString("pt-BR")}
+                    {code.count.toLocaleString('pt-BR')}
                   </TableCell>
                 </TableRow>
               ))}
@@ -63,8 +73,8 @@ function SummaryView({ data }: SummaryViewProps) {
                 </TableCell>
                 <TableCell className="text-right font-semibold">
                   {(
-                    aggregate.counters["http.downloaded_bytes"] || 0
-                  ).toLocaleString("pt-BR")}
+                    aggregate.counters['http.downloaded_bytes'] || 0
+                  ).toLocaleString('pt-BR')}
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -72,7 +82,7 @@ function SummaryView({ data }: SummaryViewProps) {
                   http.request_rate
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.rates["http.request_rate"] || 0).toFixed(0)}/sec
+                  {(aggregate.rates['http.request_rate'] || 0).toFixed(0)}/sec
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -80,8 +90,8 @@ function SummaryView({ data }: SummaryViewProps) {
                   http.requests
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.counters["http.requests"] || 0).toLocaleString(
-                    "pt-BR"
+                  {(aggregate.counters['http.requests'] || 0).toLocaleString(
+                    'pt-BR',
                   )}
                 </TableCell>
               </TableRow>
@@ -90,8 +100,8 @@ function SummaryView({ data }: SummaryViewProps) {
                   http.responses
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.counters["http.responses"] || 0).toLocaleString(
-                    "pt-BR"
+                  {(aggregate.counters['http.responses'] || 0).toLocaleString(
+                    'pt-BR',
                   )}
                 </TableCell>
               </TableRow>
@@ -100,8 +110,8 @@ function SummaryView({ data }: SummaryViewProps) {
                   vusers.completed
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.counters["vusers.completed"] || 0).toLocaleString(
-                    "pt-BR"
+                  {(aggregate.counters['vusers.completed'] || 0).toLocaleString(
+                    'pt-BR',
                   )}
                 </TableCell>
               </TableRow>
@@ -110,8 +120,8 @@ function SummaryView({ data }: SummaryViewProps) {
                   vusers.created
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.counters["vusers.created"] || 0).toLocaleString(
-                    "pt-BR"
+                  {(aggregate.counters['vusers.created'] || 0).toLocaleString(
+                    'pt-BR',
                   )}
                 </TableCell>
               </TableRow>
@@ -120,8 +130,8 @@ function SummaryView({ data }: SummaryViewProps) {
                   vusers.failed
                 </TableCell>
                 <TableCell className="text-right font-semibold">
-                  {(aggregate.counters["vusers.failed"] || 0).toLocaleString(
-                    "pt-BR"
+                  {(aggregate.counters['vusers.failed'] || 0).toLocaleString(
+                    'pt-BR',
                   )}
                 </TableCell>
               </TableRow>

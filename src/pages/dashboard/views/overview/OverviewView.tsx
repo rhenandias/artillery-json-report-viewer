@@ -1,19 +1,19 @@
-import type { ArtilleryData } from "../types";
-import StatCard from "./StatCard";
-import TimeSeriesChart from "./TimeSeriesChart";
-import ResponseTimeChart from "./ResponseTimeChart";
-import HttpCodesChart from "./HttpCodesChart";
-import ChartBuilder from "./ChartBuilder";
-import EndpointBreakdown from "./EndpointBreakdown";
-import ErrorsCard from "./ErrorsCard";
-import MetadataCard from "./MetadataCard";
+import type { ArtilleryData } from '@/types';
+import StatCard from '@/pages/dashboard/components/StatCard';
+import TimeSeriesChart from './components/TimeSeriesChart';
+import ResponseTimeChart from './components/ResponseTimeChart';
+import HttpCodesChart from './components/HttpCodesChart';
+import ChartBuilder from './components/ChartBuilder';
+import EndpointBreakdown from './components/EndpointBreakdown';
+import ErrorsCard from '@/pages/dashboard/components/ErrorsCard';
+import MetadataCard from '@/pages/dashboard/components/MetadataCard';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
-} from "./ui/card";
+} from '@/components/ui/card';
 
 interface OverviewViewProps {
   data: ArtilleryData;
@@ -23,14 +23,14 @@ interface OverviewViewProps {
 function OverviewView({ data, fileName }: OverviewViewProps) {
   const { aggregate, intermediate } = data;
 
-  const vusersCreated = aggregate.counters["vusers.created"] || 0;
-  const vusersCompleted = aggregate.counters["vusers.completed"] || 0;
-  const vusersFailed = aggregate.counters["vusers.failed"] || 0;
-  const avgReqs = aggregate.rates["http.request_rate"] || 0;
+  const vusersCreated = aggregate.counters['vusers.created'] || 0;
+  const vusersCompleted = aggregate.counters['vusers.completed'] || 0;
+  const vusersFailed = aggregate.counters['vusers.failed'] || 0;
+  const avgReqs = aggregate.rates['http.request_rate'] || 0;
 
   const peakReqs =
     intermediate.length > 0
-      ? Math.max(...intermediate.map((i) => i.rates["http.request_rate"] || 0))
+      ? Math.max(...intermediate.map((i) => i.rates['http.request_rate'] || 0))
       : 0;
 
   const completionRate =
@@ -43,7 +43,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <StatCard
           title="VUsers Created"
-          value={vusersCreated.toLocaleString("pt-BR")}
+          value={vusersCreated.toLocaleString('pt-BR')}
         />
         <Card className="col-span-1">
           <CardDescription>Completion</CardDescription>
@@ -51,7 +51,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
             <div className="flex gap-4">
               <div className="flex-1">
                 <p className="text-2xl text-green-400 font-bold">
-                  {vusersCompleted.toLocaleString("pt-BR")}
+                  {vusersCompleted.toLocaleString('pt-BR')}
                 </p>
                 <p className="text-sm text-green-400">
                   {completionRate.toFixed(2)}%
@@ -59,7 +59,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
               </div>
               <div className="flex-1">
                 <p className="text-2xl text-red-400 font-bold">
-                  {vusersFailed.toLocaleString("pt-BR")}
+                  {vusersFailed.toLocaleString('pt-BR')}
                 </p>
                 <p className="text-sm text-red-400">
                   {failureRate.toFixed(2)}%
@@ -72,8 +72,8 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
         <StatCard title="Peak Req/s" value={peakReqs.toFixed(1)} />
         <StatCard
           title="Total Requests"
-          value={(aggregate.counters["http.requests"] || 0).toLocaleString(
-            "pt-BR"
+          value={(aggregate.counters['http.requests'] || 0).toLocaleString(
+            'pt-BR',
           )}
         />
       </div>
@@ -103,7 +103,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
           </CardHeader>
           <CardContent>
             <ResponseTimeChart
-              summary={aggregate.summaries["http.response_time"]}
+              summary={aggregate.summaries?.['http.response_time']}
             />
           </CardContent>
         </Card>

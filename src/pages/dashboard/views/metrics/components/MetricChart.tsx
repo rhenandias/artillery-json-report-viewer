@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
-import { Line } from "react-chartjs-2";
+import { useMemo } from 'react';
+import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   LinearScale,
@@ -12,11 +12,11 @@ import {
   Filler,
   type ChartOptions,
   type ChartData,
-} from "chart.js";
-import "chartjs-adapter-date-fns";
-import type { IntermediateData } from "../types";
-import { formatBytes } from "../utils/formatters";
-import { getMetricValue } from "../utils/metrics";
+} from 'chart.js';
+import 'chartjs-adapter-date-fns';
+import type { IntermediateData } from '@/types';
+import { formatBytes } from '@/utils/formatters';
+import { getMetricValue } from '@/utils/metrics';
 
 ChartJS.register(
   LinearScale,
@@ -26,22 +26,22 @@ ChartJS.register(
   Tooltip,
   Legend,
   TimeScale,
-  Filler
+  Filler,
 );
 
 const COLORS = [
-  "#38bdf8",
-  "#f97316",
-  "#22c55e",
-  "#f43f5e",
-  "#a78bfa",
-  "#facc15",
-  "#e11d48",
-  "#14b8a6",
-  "#8b5cf6",
-  "#d946ef",
-  "#ec4899",
-  "#65a30d",
+  '#38bdf8',
+  '#f97316',
+  '#22c55e',
+  '#f43f5e',
+  '#a78bfa',
+  '#facc15',
+  '#e11d48',
+  '#14b8a6',
+  '#8b5cf6',
+  '#d946ef',
+  '#ec4899',
+  '#65a30d',
 ];
 
 interface MetricChartProps {
@@ -49,19 +49,19 @@ interface MetricChartProps {
   metrics: { key: string; label: string; isFilled?: boolean }[];
   intermediateData: IntermediateData[];
   yAxisLabel: string;
-  yAxisType?: "bytes" | "time" | "count";
+  yAxisType?: 'bytes' | 'time' | 'count';
 }
 
-const MetricChart: React.FC<MetricChartProps> = ({
+function MetricChart({
   title,
   metrics,
   intermediateData,
   yAxisLabel,
-  yAxisType = "count",
-}) => {
+  yAxisType = 'count',
+}: MetricChartProps) {
   const crosshairPlugin = {
-    id: "crosshair",
-    afterDraw: (chart: ChartJS<"line">) => {
+    id: 'crosshair',
+    afterDraw: (chart: ChartJS<'line'>) => {
       if (chart.tooltip?.getActiveElements().length) {
         const ctx = chart.ctx;
         const activePoint = chart.tooltip.getActiveElements()[0];
@@ -74,46 +74,46 @@ const MetricChart: React.FC<MetricChartProps> = ({
         ctx.moveTo(x, topY);
         ctx.lineTo(x, bottomY);
         ctx.lineWidth = 1;
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
         ctx.stroke();
         ctx.restore();
       }
     },
   };
 
-  const chartOptions: ChartOptions<"line"> = useMemo(
+  const chartOptions: ChartOptions<'line'> = useMemo(
     () => ({
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: "bottom",
+          position: 'bottom',
           labels: {
-            color: "#A0AEC0",
+            color: '#A0AEC0',
             usePointStyle: true,
-            pointStyle: "rectRounded",
+            pointStyle: 'rectRounded',
             boxWidth: 10,
             boxHeight: 10,
           },
         },
         tooltip: {
-          mode: "index",
+          mode: 'index',
           intersect: false,
-          backgroundColor: "rgba(0,0,0,0.8)",
+          backgroundColor: 'rgba(0,0,0,0.8)',
           displayColors: true,
           usePointStyle: true,
           titleFont: {
-            weight: "bold",
+            weight: 'bold',
           },
           bodyFont: {
             size: 12,
           },
           callbacks: {
             title: (context) => {
-              const date = new Date(context[0].parsed.x || "");
-              return date.toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "2-digit",
+              const date = new Date(context[0].parsed.x || '');
+              return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
               });
             },
           },
@@ -121,23 +121,23 @@ const MetricChart: React.FC<MetricChartProps> = ({
       },
       scales: {
         x: {
-          type: "time",
-          time: { tooltipFormat: "T", unit: "second" },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
+          type: 'time',
+          time: { tooltipFormat: 'T', unit: 'second' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           ticks: {
-            color: "#A0AEC0",
+            color: '#A0AEC0',
             maxTicksLimit: 5,
           },
         },
         y: {
-          title: { display: true, text: yAxisLabel, color: "#A0AEC0" },
-          grid: { color: "rgba(255, 255, 255, 0.1)" },
+          title: { display: true, text: yAxisLabel, color: '#A0AEC0' },
+          grid: { color: 'rgba(255, 255, 255, 0.1)' },
           ticks: {
-            color: "#A0AEC0",
+            color: '#A0AEC0',
             callback: (value) => {
-              if (typeof value !== "number") return value;
-              if (yAxisType === "bytes") return formatBytes(value);
-              if (yAxisType === "time") return `${value}ms`;
+              if (typeof value !== 'number') return value;
+              if (yAxisType === 'bytes') return formatBytes(value);
+              if (yAxisType === 'time') return `${value}ms`;
               if (value >= 1000) return `${value / 1000}k`;
               return value;
             },
@@ -145,7 +145,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
         },
       },
     }),
-    [yAxisLabel, yAxisType]
+    [yAxisLabel, yAxisType],
   );
 
   const chartData = useMemo(() => {
@@ -168,7 +168,7 @@ const MetricChart: React.FC<MetricChartProps> = ({
           backgroundColor: `${COLORS[index % COLORS.length]}4D`, // 30% opacity
           fill: metric.isFilled || false,
           pointHoverRadius: 5,
-          pointStyle: "rectRounded",
+          pointStyle: 'rectRounded',
         };
       })
       .filter(Boolean);
@@ -191,15 +191,15 @@ const MetricChart: React.FC<MetricChartProps> = ({
   return (
     <div>
       <h3 className="text-lg font-bold text-white mb-4">{title}</h3>
-      <div style={{ height: "300px" }}>
+      <div style={{ height: '300px' }}>
         <Line
           options={chartOptions}
-          data={chartData as unknown as ChartData<"line">}
+          data={chartData as unknown as ChartData<'line'>}
           plugins={[crosshairPlugin]}
         />
       </div>
     </div>
   );
-};
+}
 
 export default MetricChart;

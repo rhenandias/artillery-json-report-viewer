@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
+
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 interface ErrorsCardProps {
   counters: { [key: string]: number };
@@ -13,9 +13,9 @@ const formatNumber = (num: number): string => {
   return num.toString();
 };
 
-const ErrorsCard: React.FC<ErrorsCardProps> = ({ counters }) => {
+function ErrorsCard({ counters }: ErrorsCardProps) {
   const errorEntries = Object.entries(counters).filter(([key]) =>
-    key.startsWith("errors.")
+    key.startsWith('errors.'),
   );
 
   return (
@@ -31,7 +31,7 @@ const ErrorsCard: React.FC<ErrorsCardProps> = ({ counters }) => {
                 key={key}
                 className="flex justify-between items-center text-gray-300 text-sm"
               >
-                <span>{key.replace("errors.", "")}</span>
+                <span>{key.replace('errors.', '')}</span>
                 <span className="font-semibold text-white">
                   {formatNumber(value)}
                 </span>
@@ -46,6 +46,6 @@ const ErrorsCard: React.FC<ErrorsCardProps> = ({ counters }) => {
       </CardContent>
     </Card>
   );
-};
+}
 
 export default ErrorsCard;

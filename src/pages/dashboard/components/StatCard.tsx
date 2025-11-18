@@ -1,4 +1,4 @@
-import { Card, CardDescription, CardContent } from "./ui/card";
+import { Card, CardDescription, CardContent } from '@/components/ui/card';
 
 interface StatCardProps {
   title: string;
