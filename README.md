@@ -1,73 +1,256 @@
-# React + TypeScript + Vite
+# Artillery JSON Report Viewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Visualizador de relatórios JSON gerados pelo Artillery para análise de testes de carga e performance.
 
-Currently, two official plugins are available:
+## 🚀 Início Rápido
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. Instalar Dependências
 
-## React Compiler
+```bash
+# Instalar dependências da aplicação React
+npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Instalar dependências da Mock API
+cd mock-api
+npm install
+cd ..
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+# Instalar Artillery globalmente
+npm install -g artillery
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Executar a Mock API
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+npm run api:start
 ```
+
+A API estará disponível em `http://localhost:3001`
+
+### 3. Executar Testes Artillery
+
+Em outro terminal:
+
+```bash
+# Teste básico (60s, 5 req/s)
+npm run test:basic
+
+# Teste de carga (4min, 5-100 req/s)
+npm run test:load
+
+# Teste de estresse (2.5min, 10-200 req/s)
+npm run test:stress
+
+# Executar todos os testes
+npm run test:all
+```
+
+### 4. Visualizar Relatórios
+
+```bash
+# Iniciar a aplicação React
+npm run dev
+```
+
+Abra `http://localhost:5173` e faça upload dos arquivos JSON gerados em `/reports/`
+
+## 📁 Estrutura do Projeto
+
+```
+artillery-json-report-viewer/
+├── src/                      # Aplicação React
+│   ├── components/          # Componentes da UI
+│   ├── utils/               # Utilitários
+│   └── types.ts             # Tipos TypeScript
+│
+├── mock-api/                # API Mock para testes
+│   ├── server.js            # Servidor Express
+│   ├── package.json         # Dependências da API
+│   └── README.md            # Documentação da API
+│
+├── artillery-tests/         # Scripts de teste Artillery
+│   ├── basic-test.yml       # Teste básico
+│   ├── load-test.yml        # Teste de carga
+│   ├── stress-test.yml      # Teste de estresse
+│   ├── processor.js         # Funções auxiliares
+│   └── README.md            # Documentação dos testes
+│
+├── reports/                 # Relatórios gerados (gitignored)
+│   ├── basic-report.json
+│   ├── load-report.json
+│   └── stress-report.json
+│
+└── package.json             # Scripts principais
+```
+
+## 🎯 Scripts Disponíveis
+
+### Aplicação React
+```bash
+npm run dev          # Inicia servidor de desenvolvimento
+npm run build        # Build para produção
+npm run preview      # Preview do build
+npm run lint         # Executa linter
+npm run format       # Formata código com Prettier
+```
+
+### Mock API
+```bash
+npm run api:install  # Instala dependências da API
+npm run api:start    # Inicia a Mock API
+npm run api:dev      # Inicia API em modo desenvolvimento
+```
+
+### Testes Artillery
+```bash
+npm run test:basic   # Teste básico (60s)
+npm run test:load    # Teste de carga (4min)
+npm run test:stress  # Teste de estresse (2.5min)
+npm run test:all     # Executa todos os testes
+```
+
+### Workflow Completo
+```bash
+npm run workflow     # API + Teste básico + Visualizador
+```
+
+## 📊 Tipos de Teste
+
+### 🟢 Teste Básico
+- **Duração**: 60 segundos
+- **Carga**: 5 requisições/segundo
+- **Uso**: Validação rápida, desenvolvimento diário
+
+### 🟡 Teste de Carga
+- **Duração**: ~4 minutos
+- **Carga**: 5 → 100 requisições/segundo
+- **Fases**: Aquecimento, rampa, sustentação, pico, cooldown
+- **Uso**: Simular carga realista, identificar gargalos
+
+### 🔴 Teste de Estresse
+- **Duração**: ~2.5 minutos
+- **Carga**: 10 → 200 requisições/segundo
+- **Uso**: Identificar limites, testar recuperação de falhas
+
+## 🔧 Configuração
+
+### Alterar Porta da Mock API
+
+Edite `mock-api/server.js`:
+```javascript
+const PORT = 3001; // Sua porta
+```
+
+E atualize os arquivos em `artillery-tests/*.yml`:
+```yaml
+config:
+  target: "http://localhost:3001"
+```
+
+### Personalizar Testes
+
+Edite os arquivos `.yml` em `artillery-tests/`:
+
+```yaml
+config:
+  phases:
+    - duration: 60        # Duração em segundos
+      arrivalRate: 10     # Requisições por segundo
+      rampTo: 50          # Rampa até X req/s
+```
+
+## 📈 Métricas Capturadas
+
+Os relatórios Artillery incluem:
+- **Latência**: min, max, median, p50, p75, p90, p95, p99, p999
+- **Taxa de requisições**: req/s ao longo do tempo
+- **Taxa de erros**: erros HTTP, timeouts, falhas de conexão
+- **Códigos HTTP**: distribuição de 2xx, 4xx, 5xx
+- **Contadores customizados**: métricas específicas dos cenários
+
+## 🎨 Recursos da Aplicação
+
+- ✅ Upload de arquivos JSON do Artillery
+- ✅ Visualização de métricas agregadas
+- ✅ Gráficos interativos de latência
+- ✅ Análise de performance ao longo do tempo
+- ✅ Comparação de percentis
+- ✅ Interface moderna e responsiva
+
+## 🛠️ Tecnologias
+
+### Frontend
+- React 19
+- TypeScript
+- Vite
+- TailwindCSS 4
+- Chart.js
+- Radix UI
+
+### Mock API
+- Node.js
+- Express
+- CORS
+
+### Testes
+- Artillery
+
+## 📝 Workflow Recomendado
+
+1. **Inicie a Mock API**
+   ```bash
+   npm run api:start
+   ```
+
+2. **Execute um teste Artillery**
+   ```bash
+   npm run test:basic
+   ```
+
+3. **Inicie a aplicação React**
+   ```bash
+   npm run dev
+   ```
+
+4. **Faça upload do relatório** gerado em `/reports/basic-report.json`
+
+5. **Analise as métricas** na interface visual
+
+## 🐛 Troubleshooting
+
+### Erro: "ECONNREFUSED"
+- A Mock API não está rodando
+- Execute `npm run api:start`
+
+### Erro: "artillery: command not found"
+- Instale Artillery globalmente: `npm install -g artillery`
+
+### Porta já em uso
+- Altere a porta no `mock-api/server.js`
+- Atualize os arquivos `.yml` do Artillery
+
+### Relatórios não aparecem
+- Verifique se os arquivos estão em `/reports/`
+- Confirme que o teste Artillery foi concluído
+
+## 📚 Documentação Adicional
+
+- [Mock API](./mock-api/README.md) - Detalhes sobre os endpoints
+- [Testes Artillery](./artillery-tests/README.md) - Guia completo dos testes
+- [Artillery Docs](https://www.artillery.io/docs) - Documentação oficial
+
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Sinta-se à vontade para:
+- Adicionar novos endpoints na Mock API
+- Criar novos cenários de teste
+- Melhorar a visualização de dados
+- Reportar bugs ou sugerir melhorias
+
+## 📄 Licença
+
+MIT
+
+---
+
+**Desenvolvido para facilitar a análise de testes de performance com Artillery** 🚀

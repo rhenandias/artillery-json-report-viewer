@@ -151,16 +151,64 @@ function ChartBuilder({ data }: ChartBuilderProps) {
     );
   };
 
+  const crosshairPlugin = {
+    id: 'crosshair',
+    afterDraw: (chart: ChartJS<'line'>) => {
+      if (chart.tooltip?.getActiveElements().length) {
+        const ctx = chart.ctx;
+        const activePoint = chart.tooltip.getActiveElements()[0];
+        const x = activePoint.element.x;
+        const topY = chart.scales.y.top;
+        const bottomY = chart.scales.y.bottom;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.stroke();
+        ctx.restore();
+      }
+    },
+  };
+
   const chartOptions: ChartOptions<'line'> = useMemo(
     () => ({
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#A0AEC0' } },
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#A0AEC0',
+            usePointStyle: true,
+            pointStyle: 'rectRounded',
+            boxWidth: 10,
+            boxHeight: 10,
+          },
+        },
         tooltip: {
           mode: 'index',
           intersect: false,
           backgroundColor: 'rgba(0,0,0,0.8)',
+          displayColors: true,
+          usePointStyle: true,
+          titleFont: {
+            weight: 'bold',
+          },
+          bodyFont: {
+            size: 12,
+          },
+          callbacks: {
+            title: (context) => {
+              const date = new Date(context[0].parsed.x || '');
+              return date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+              });
+            },
+          },
         },
       },
       scales: {
@@ -168,7 +216,7 @@ function ChartBuilder({ data }: ChartBuilderProps) {
           type: 'time',
           time: { tooltipFormat: 'T', unit: 'second' },
           grid: { color: 'rgba(255, 255, 255, 0.1)' },
-          ticks: { color: '#A0AEC0' },
+          ticks: { color: '#A0AEC0', maxTicksLimit: 15 },
         },
         y: {
           type: 'linear',
@@ -224,6 +272,7 @@ function ChartBuilder({ data }: ChartBuilderProps) {
         yAxisID: metricInfo?.type === 'time' ? 'y1' : 'y',
         pointRadius: 2,
         borderWidth: 2,
+        pointStyle: 'rectRounded',
       };
     });
 
@@ -251,7 +300,11 @@ function ChartBuilder({ data }: ChartBuilderProps) {
         <div className="lg:col-span-3">
           {selectedMetrics.length > 0 ? (
             <div style={{ height: '450px' }}>
-              <Line options={chartOptions} data={chartData} />
+              <Line
+                options={chartOptions}
+                data={chartData}
+                plugins={[crosshairPlugin]}
+              />
             </div>
           ) : (
             <div className="flex items-center justify-center h-[450px] border-2 border-dashed border-gray-700 rounded-lg bg-gray-900/50">
