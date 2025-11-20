@@ -13,7 +13,7 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import type { ArtilleryData, Summary } from '@/types';
-import { crosshairPlugin } from '@/utils/chartjs/plugins';
+import { crosshairPlugin } from '@/chartjs/plugins';
 import { CardTitle } from '@/components/ui/card';
 import Sparkline from '@/components/Sparkline';
 

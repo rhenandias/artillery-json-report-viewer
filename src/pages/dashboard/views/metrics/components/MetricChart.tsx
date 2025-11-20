@@ -15,7 +15,7 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import type { IntermediateData } from '@/types';
-import { crosshairPlugin } from '@/utils/chartjs/plugins';
+import { crosshairPlugin } from '@/chartjs/plugins';
 import { formatBytes } from '@/utils/formatters';
 import { getMetricValue } from '@/utils/metrics';
 
