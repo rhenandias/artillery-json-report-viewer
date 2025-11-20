@@ -1,7 +1,12 @@
-
 import { Line } from 'react-chartjs-2';
 import type { ChartOptions } from 'chart.js';
 import type { IntermediateData } from '@/types';
+import {
+  crosshairPlugin,
+  legendConfig,
+  lineTooltipConfig,
+  interactionConfig,
+} from '@/chartjs/plugins';
 
 interface EndpointDetailChartProps {
   endpointName: string;
@@ -15,15 +20,15 @@ function EndpointDetailChart({
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
+    interaction: {
+      ...interactionConfig,
+    },
     plugins: {
       legend: {
-        position: 'bottom' as const,
-        labels: { color: '#A0AEC0', boxWidth: 12, padding: 20 },
+        ...legendConfig,
       },
       tooltip: {
-        mode: 'index',
-        intersect: false,
-        backgroundColor: 'rgba(0,0,0,0.8)',
+        ...lineTooltipConfig,
       },
       title: {
         display: true,
@@ -37,7 +42,7 @@ function EndpointDetailChart({
         type: 'time',
         time: { tooltipFormat: 'T', unit: 'second' },
         grid: { color: 'rgba(255, 255, 255, 0.1)' },
-        ticks: { color: '#A0AEC0' },
+        ticks: { color: '#A0AEC0', maxTicksLimit: 15 },
       },
       y: {
         type: 'linear',
@@ -75,17 +80,16 @@ function EndpointDetailChart({
       })),
       borderColor: colors[p as keyof typeof colors] || '#FFFFFF',
       backgroundColor: `${colors[p as keyof typeof colors] || '#FFFFFF'}1A`,
-      tension: 0.1,
       yAxisID: 'y',
-      pointRadius: 1,
-      borderWidth: 2,
       borderDash: p === 'mean' || p === 'p50' ? [5, 5] : [],
+      pointHoverRadius: 5,
+      pointStyle: 'rectRounded',
     })),
   };
 
   return (
     <div style={{ height: '350px' }}>
-      <Line options={options} data={data} />
+      <Line options={options} data={data} plugins={[crosshairPlugin]} />
     </div>
   );
 }
