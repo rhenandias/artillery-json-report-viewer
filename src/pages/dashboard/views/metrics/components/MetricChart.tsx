@@ -15,7 +15,12 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import type { IntermediateData } from '@/types';
-import { crosshairPlugin } from '@/chartjs/plugins';
+import {
+  crosshairPlugin,
+  legendConfig,
+  lineTooltipConfig,
+  interactionConfig,
+} from '@/chartjs/plugins';
 import { formatBytes } from '@/utils/formatters';
 import { getMetricValue } from '@/utils/metrics';
 
@@ -64,38 +69,15 @@ function MetricChart({
     () => ({
       responsive: true,
       maintainAspectRatio: false,
+      interaction: {
+        ...interactionConfig,
+      },
       plugins: {
         legend: {
-          position: 'bottom',
-          labels: {
-            color: '#A0AEC0',
-            usePointStyle: true,
-            pointStyle: 'rectRounded',
-            boxWidth: 10,
-            boxHeight: 10,
-          },
+          ...legendConfig,
         },
         tooltip: {
-          mode: 'index',
-          intersect: false,
-          backgroundColor: 'rgba(0,0,0,0.8)',
-          displayColors: true,
-          usePointStyle: true,
-          titleFont: {
-            weight: 'bold',
-          },
-          bodyFont: {
-            size: 12,
-          },
-          callbacks: {
-            title: (context) => {
-              const date = new Date(context[0].parsed.x || '');
-              return date.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-              });
-            },
-          },
+          ...lineTooltipConfig,
         },
       },
       scales: {

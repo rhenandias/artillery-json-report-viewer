@@ -1,4 +1,3 @@
-
 import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -7,6 +6,7 @@ import {
   Legend,
   type ChartOptions,
 } from 'chart.js';
+import { legendConfig } from '@/chartjs/plugins';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -45,8 +45,9 @@ function HttpCodesChart({ counters }: HttpCodesChartProps) {
           '#A855F7', // Purple
         ],
         borderColor: '#1E1E1E',
-        borderWidth: 4,
+        borderWidth: 2,
         hoverOffset: 8,
+        pointStyle: 'rectRounded',
       },
     ],
   };
@@ -57,12 +58,7 @@ function HttpCodesChart({ counters }: HttpCodesChartProps) {
     cutout: '70%',
     plugins: {
       legend: {
-        position: 'bottom' as const,
-        labels: {
-          color: '#A0AEC0',
-          boxWidth: 12,
-          padding: 15,
-        },
+        ...legendConfig,
       },
     },
   };
