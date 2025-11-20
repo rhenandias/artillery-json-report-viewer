@@ -1,4 +1,3 @@
-
 import { Line } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -15,6 +14,12 @@ import {
 } from 'chart.js';
 import 'chartjs-adapter-date-fns';
 import type { IntermediateData } from '@/types';
+import {
+  crosshairPlugin,
+  legendConfig,
+  lineTooltipConfig,
+  interactionConfig,
+} from '@/chartjs/plugins';
 
 ChartJS.register(
   CategoryScale,
@@ -33,34 +38,11 @@ interface TimeSeriesChartProps {
 }
 
 function TimeSeriesChart({ intermediateData }: TimeSeriesChartProps) {
-  const crosshairPlugin = {
-    id: 'crosshair',
-    afterDraw: (chart: ChartJS<'line'>) => {
-      if (chart.tooltip?.getActiveElements().length) {
-        const ctx = chart.ctx;
-        const activePoint = chart.tooltip.getActiveElements()[0];
-        const x = activePoint.element.x;
-        const topY = chart.scales.y.top;
-        const bottomY = chart.scales.y.bottom;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(x, topY);
-        ctx.lineTo(x, bottomY);
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-        ctx.stroke();
-        ctx.restore();
-      }
-    },
-  };
-
   const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
-      mode: 'index',
-      intersect: false,
+      ...interactionConfig,
     },
     hover: {
       mode: 'index',
@@ -68,36 +50,10 @@ function TimeSeriesChart({ intermediateData }: TimeSeriesChartProps) {
     },
     plugins: {
       legend: {
-        position: 'bottom',
-        labels: {
-          color: '#A0AEC0',
-          usePointStyle: true,
-          pointStyle: 'rectRounded',
-          boxWidth: 10,
-          boxHeight: 10,
-        },
+        ...legendConfig,
       },
       tooltip: {
-        mode: 'index',
-        intersect: false,
-        backgroundColor: 'rgba(0,0,0,0.8)',
-        displayColors: true,
-        usePointStyle: true,
-        titleFont: {
-          weight: 'bold',
-        },
-        bodyFont: {
-          size: 12,
-        },
-        callbacks: {
-          title: (context) => {
-            const date = new Date(context[0].parsed.x || '');
-            return date.toLocaleTimeString('en-US', {
-              hour: 'numeric',
-              minute: '2-digit',
-            });
-          },
-        },
+        ...lineTooltipConfig,
       },
     },
     scales: {

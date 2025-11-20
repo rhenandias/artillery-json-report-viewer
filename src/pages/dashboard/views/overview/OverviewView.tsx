@@ -109,7 +109,7 @@ function OverviewView({ data, fileName }: OverviewViewProps) {
         </Card>
         <Card className="flex flex-col items-center justify-center">
           <CardHeader>
-            <CardTitle>Requests Breakdown by URL</CardTitle>
+            <CardTitle>HTTP Codes</CardTitle>
           </CardHeader>
           <CardContent>
             <HttpCodesChart counters={aggregate.counters} />
